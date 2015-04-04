@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalSpriteAnimation", "UniversalSpriteAnimation\UniversalSpriteAnimation.csproj", "{FD3C9FDE-FCB1-49AA-8105-B8DDC3647D84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalSpriteAnimation - Legacy", "UniversalSpriteAnimation\UniversalSpriteAnimation - Legacy.csproj", "{0B13CA13-D31E-4012-9095-09D5E7DAF867}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnivesalSpriteAnimation tests", "UnivesalSpriteAnimation tests\UnivesalSpriteAnimation tests.csproj", "{966C9023-4586-4F36-BCBC-33E9D304A8A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD3C9FDE-FCB1-49AA-8105-B8DDC3647D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD3C9FDE-FCB1-49AA-8105-B8DDC3647D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD3C9FDE-FCB1-49AA-8105-B8DDC3647D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD3C9FDE-FCB1-49AA-8105-B8DDC3647D84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B13CA13-D31E-4012-9095-09D5E7DAF867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B13CA13-D31E-4012-9095-09D5E7DAF867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B13CA13-D31E-4012-9095-09D5E7DAF867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B13CA13-D31E-4012-9095-09D5E7DAF867}.Release|Any CPU.Build.0 = Release|Any CPU
+		{966C9023-4586-4F36-BCBC-33E9D304A8A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966C9023-4586-4F36-BCBC-33E9D304A8A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966C9023-4586-4F36-BCBC-33E9D304A8A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966C9023-4586-4F36-BCBC-33E9D304A8A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
