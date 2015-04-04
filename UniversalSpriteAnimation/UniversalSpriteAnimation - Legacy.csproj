@@ -134,6 +134,10 @@
     <Compile Include="AnimationType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CodeContracts\ContractForIAnimation.cs" />
+    <Compile Include="CodeContracts\ContractForIAnimationFrame.cs" />
+    <Compile Include="CodeContracts\ContractForIAnimationSequence.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IAnimation.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -143,7 +147,7 @@
     <Compile Include="IAnimationSequence.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MirrorType.cs">
+    <Compile Include="MirrorDirections.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

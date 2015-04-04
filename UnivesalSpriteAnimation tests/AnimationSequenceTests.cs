@@ -17,7 +17,7 @@ namespace UnivesalSpriteAnimation_tests {
             Assert.IsFalse(sequence.Visible);
             Assert.IsFalse(sequence.Reverse);
             Assert.That(sequence.Name == null);
-            Assert.That(sequence.Mirror == MirrorType.None);
+            Assert.That(sequence.Mirror == MirrorDirections.None);
             Assert.That(sequence.AnimationType == AnimationType.Once);
             Assert.That(sequence.CurrentFrame == null);
             Assert.That(sequence.CurrentFrameIndex == 0);
@@ -38,7 +38,7 @@ namespace UnivesalSpriteAnimation_tests {
             Assert.IsFalse(sequence.Visible);
             Assert.IsFalse(sequence.Reverse);
             Assert.That(sequence.Name == name);
-            Assert.That(sequence.Mirror == MirrorType.None);
+            Assert.That(sequence.Mirror == MirrorDirections.None);
             Assert.That(sequence.AnimationType == AnimationType.Once);
             Assert.That(sequence.CurrentFrame == frames[0]);
             Assert.That(sequence.CurrentFrameIndex == 0);
@@ -72,44 +72,6 @@ namespace UnivesalSpriteAnimation_tests {
                 Assert.AreEqual(clonedFrame.Source, originalFrame.Source);
                 Assert.AreEqual(clonedFrame.Origin, originalFrame.Origin);
             }
-        }
-
-        [Test]
-        public void WhenAnimationTypeOnceIsResumedItStartsFromAppropriateFrame() {
-            testSequence.AnimationType = AnimationType.Once;
-            testSequence.Start();
-            AdvanceToEnd(testSequence);
-            testSequence.Animating = true;
-            Assert.That(testSequence.CurrentFrameIndex == 0);
-        }
-
-        [Test]
-        public void WhenAnimationTypeOnceReverseIsResumedItStartsFromAppropriateFrame() {
-            testSequence.AnimationType = AnimationType.Once;
-            testSequence.Reverse = true;
-            testSequence.Start();
-            AdvanceToEnd(testSequence);
-            testSequence.Animating = true;
-            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
-        }
-
-        [Test]
-        public void WhenAnimationTypeOnceDisappearIsResumedItStartsFromAppropriateFrame() {
-            testSequence.AnimationType = AnimationType.OnceDisappear;
-            testSequence.Start();
-            AdvanceToEnd(testSequence);
-            testSequence.Animating = true;
-            Assert.That(testSequence.CurrentFrameIndex == 0);
-        }
-
-        [Test]
-        public void WhenAnimationTypeOnceDisappearReverseIsResumedItStartsFromAppropriateFrame() {
-            testSequence.AnimationType = AnimationType.OnceDisappear;
-            testSequence.Reverse = true;
-            testSequence.Start();
-            AdvanceToEnd(testSequence);
-            testSequence.Animating = true;
-            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
         }
 
         [Test]

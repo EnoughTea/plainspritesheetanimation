@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -9,14 +8,13 @@ namespace Unisa {
     /// <summary> Represents a sequence of frames. </summary>
     [DataContract(Name = "seq"), KnownType(typeof(AnimationFrame)), DebuggerDisplay("{ToString()}")]
     public class AnimationSequence : IAnimationSequence {
-        [DataMember(Name = "a", IsRequired = false, EmitDefaultValue = false, Order = 5)]
-        private bool _animating;
-        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 6)]
-        private bool _reverse;
-        [DataMember(Name = "cfi", IsRequired = false, EmitDefaultValue = false, Order = 7)]
-        private int _currentFrameIndex;
-        [DataMember(Name = "ft", IsRequired = false, EmitDefaultValue = false, Order = 8)]
-        private float _frameTime;
+        [DataMember(Name = "a", IsRequired = false, EmitDefaultValue = false, Order = 5)] private bool _animating;
+
+        [DataMember(Name = "cfi", IsRequired = false, EmitDefaultValue = false, Order = 7)] private int
+            _currentFrameIndex;
+
+        [DataMember(Name = "ft", IsRequired = false, EmitDefaultValue = false, Order = 8)] private float _frameTime;
+        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 6)] private bool _reverse;
 
         /// <summary> Initializes a new instance of the <see cref="AnimationSequence" /> class. </summary>
         /// <param name="name">The animation sequence name.</param>
@@ -41,9 +39,7 @@ namespace Unisa {
         ///     out of range for the <see cref="Frames" /> list.
         /// </summary>
         public IAnimationFrame CurrentFrame {
-            get {
-                return (CurrentFrameIndex >= 0 && CurrentFrameIndex < Frames.Count) ? Frames[CurrentFrameIndex] : null;
-            }
+            get { return !IsBeyondIndex(CurrentFrameIndex) ? Frames[CurrentFrameIndex] : null; }
         }
 
         /// <summary> Gets or sets index of the current frame in the frame sequence. </summary>
@@ -53,41 +49,53 @@ namespace Unisa {
             set {
                 switch (AnimationType) {
                     case AnimationType.Once:
+                        _currentFrameIndex = value;
+                        if (IsBeyondIndex(_currentFrameIndex)) {
+                            _currentFrameIndex = GetFirstIndex();
+                            Animating = false;
+                        }
+
+                        break;
+
                     case AnimationType.OnceHoldLast:
+                        _currentFrameIndex = value;
+                        if (IsBeyondIndex(_currentFrameIndex)) {
+                            _currentFrameIndex = GetLastIndex();
+                            Animating = false;
+                        }
+                        break;
+
                     case AnimationType.OnceDisappear:
-                        if (IsBeyondIndex(value)) {
-
-                        }
-
-                        if (Reverse && value <= -1) {
-                            _currentFrameIndex = (AnimationType == AnimationType.Once) ? Frames.Count - 1 : 0;
+                        _currentFrameIndex = value;
+                        if (IsBeyondIndex(_currentFrameIndex)) {
                             Animating = false;
-                            if (AnimationType == AnimationType.OnceDisappear) { Visible = false; }
-                        } else if (!Reverse && value >= Frames.Count) {
-                            _currentFrameIndex = (AnimationType == AnimationType.Once) ? 0 : Frames.Count - 1;
-                            Animating = false;
-                            if (AnimationType == AnimationType.OnceDisappear) { Visible = false; }
-                        } else {
-                            _currentFrameIndex = value % Frames.Count;
+                            Visible = false;
+                            _currentFrameIndex = GetLastIndex();
                         }
-
                         break;
 
                     case AnimationType.Looping:
-                        while (value < 0) { value += Frames.Count; }
+                        if (Frames.Count > 0) {
+                            while (value < 0) { value += Frames.Count; }
 
-                        _currentFrameIndex = value % Frames.Count;
+                            _currentFrameIndex = value % Frames.Count;
+                        } else {
+                            _currentFrameIndex = value;
+                        }
                         break;
 
                     case AnimationType.PingPong:
-                        value = Math.Abs(value);
-                        value %= Frames.Count * 2;
-                        if (value >= Frames.Count) { value = (2 * Frames.Count) - 1 - value; }
+                        if (Frames.Count > 0) {
+                            value = Math.Abs(value);
+                            value %= Frames.Count * 2;
+                            if (value >= Frames.Count) { value = (2 * Frames.Count) - 1 - value; }
 
-                        _currentFrameIndex = value;
-                        // check for the ping-ponging.
-                        if (IsLastIndex(_currentFrameIndex)) { Reverse = !Reverse; }
-
+                            _currentFrameIndex = value;
+                            // Ping-pong on last index.
+                            if (IsLastIndex(_currentFrameIndex)) { Reverse = !Reverse; }
+                        } else {
+                            _currentFrameIndex = value;
+                        }
                         break;
 
                     default:
@@ -105,7 +113,7 @@ namespace Unisa {
             set {
                 if (_reverse != value) {
                     _reverse = value;
-                    PlayDirectionChanged(this);
+                    PlayDirectionChanged(this, EventArgs.Empty);
                 }
             }
         }
@@ -118,38 +126,10 @@ namespace Unisa {
             get { return _animating; }
 
             set {
-                bool doEvent = (value != _animating);
-                _animating = value;
-
-                // If we're resuming 'once' animation sequences on their last frame, rewind them back, 
-                // since it's most probably what caller wants.
-                if (_animating && RunningOnce) {
-                    if (IsLastIndex(_currentFrameIndex)) { _currentFrameIndex = GetFirstIndex(); }
+                if (_animating != value) {
+                    _animating = value;
+                    if (_animating) { Started(this, EventArgs.Empty); } else { Stopped(this, EventArgs.Empty); }
                 }
-
-                if (doEvent) { if (_animating) { Started(this); } else { Stopped(this); } }
-            }
-        }
-
-        private int GetLastIndex() {
-            return !Reverse ? Math.Max(0, Frames.Count - 1) : 0;
-        }
-        private int GetFirstIndex() {
-            return !Reverse ? 0 : Math.Max(0, Frames.Count - 1);
-        }
-
-        private bool IsLastIndex(int index) {
-            return (Reverse && index == 0) || (!Reverse && index == Math.Max(0, Frames.Count - 1));
-        }
-
-        private bool IsBeyondIndex(int index) {
-            return (Reverse && index <= -1) || (!Reverse && index == Frames.Count);
-        }
-
-        private bool RunningOnce {
-            get {
-                return AnimationType == AnimationType.Once || AnimationType == AnimationType.OnceHoldLast ||
-                       AnimationType == AnimationType.OnceDisappear;
             }
         }
 
@@ -165,16 +145,16 @@ namespace Unisa {
 
         /// <summary>Gets or sets the value indicating whether to mirror this sequence when rendered, or not.</summary>
         [DataMember(Name = "m", EmitDefaultValue = false, IsRequired = false, Order = 2)]
-        public MirrorType Mirror { get; set; }
+        public MirrorDirections Mirror { get; set; }
 
         /// <summary> Event which is raised when the animation is stopped. </summary>
-        public event Action<IAnimationSequence> Stopped = delegate { };
+        public event AnimationSequenceEventHandler Stopped = delegate { };
 
         /// <summary> Event which is raised when the animation is started. </summary>
-        public event Action<IAnimationSequence> Started = delegate { };
+        public event AnimationSequenceEventHandler Started = delegate { };
 
         /// <summary> Event which is raised when the play direction is changed. </summary>
-        public event Action<IAnimationSequence> PlayDirectionChanged = delegate { };
+        public event AnimationSequenceEventHandler PlayDirectionChanged = delegate { };
 
         /// <summary>
         ///     Shows the next frame in the sequence.  This pays attention to whether the animation is playing
@@ -259,11 +239,9 @@ namespace Unisa {
 
         /// <summary>Sets the new duration for the sequence, scaling individual frame durations.</summary>
         public void SetDuration(float newDuration) {
-            Contract.Requires(newDuration >= 0);
-
             float oldDuration = GetDuration();
             foreach (var frame in Frames) {
-                if (oldDuration != 0) {
+                if (Math.Abs(oldDuration) > 0.001f) {
                     frame.Duration = newDuration * (frame.Duration / oldDuration);
                 } else {
                     frame.Duration = newDuration / Frames.Count;
@@ -278,7 +256,23 @@ namespace Unisa {
             string visible = Visible ? "visible" : "invisible";
             string animating = Animating ? "active" : "inactive";
             return name + ", " + "frame index is " + CurrentFrameIndex + " out of " + Frames.Count + " frames (" +
-                visible + ", " + animating +")";
+                   visible + ", " + animating + ")";
+        }
+
+        private int GetLastIndex() {
+            return !Reverse ? Math.Max(0, Frames.Count - 1) : 0;
+        }
+
+        private int GetFirstIndex() {
+            return !Reverse ? 0 : Math.Max(0, Frames.Count - 1);
+        }
+
+        private bool IsLastIndex(int index) {
+            return (Reverse && index == 0) || (!Reverse && index == Frames.Count - 1);
+        }
+
+        private bool IsBeyondIndex(int index) {
+            return (index < 0 || index >= Frames.Count);
         }
     }
 }

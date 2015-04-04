@@ -7,10 +7,10 @@ namespace Unisa {
     /// <summary> Represents a point coordinates on a texture. </summary>
     [DataContract, DebuggerDisplay("{ToString()}")]
     public struct TexturePoint : IEquatable<TexturePoint> {
-        private static readonly char[] _sep = { ' ' };
+        private static readonly char[] _sep = {' '};
         public static readonly TexturePoint Zero = new TexturePoint();
 
-        /// <summary> Initializes a new instance of the <see cref="TexturePoint"/> struct. </summary>
+        /// <summary> Initializes a new instance of the <see cref="TexturePoint" /> struct. </summary>
         /// <param name="x">The X coordinate.</param>
         /// <param name="y">The Y coordinate.</param>
         public TexturePoint(int x, int y)
@@ -27,14 +27,14 @@ namespace Unisa {
         [DataMember(Name = "y")]
         public int Y { get; private set; }
 
+        public bool Equals(TexturePoint other) {
+            return X == other.X && Y == other.Y;
+        }
+
         /// <summary> Returns a <see cref="String" /> that represents this instance. </summary>
         /// <returns> A <see cref="String" /> that represents this instance. </returns>
         public override string ToString() {
             return X + " " + Y;
-        }
-
-        public bool Equals(TexturePoint other) {
-            return X == other.X && Y == other.Y;
         }
 
         public override bool Equals(object obj) {
@@ -55,15 +55,15 @@ namespace Unisa {
             return !left.Equals(right);
         }
 
-        /// <summary> Parses <see cref="TextureSize" /> from the given string in "x y" format. </summary>
-        /// <param name="vec">The string containg vector data.</param>
+        /// <summary> Parses <see cref="TexturePoint" /> from the given string in "x y" format. </summary>
+        /// <param name="point">The string containg point data.</param>
         /// <param name="provider">The format provider.</param>
         /// <returns>Parsed <see cref="TextureSize" />.</returns>
         [Pure]
-        public static TexturePoint Parse(string vec, IFormatProvider provider = null) {
+        public static TexturePoint Parse(string point, IFormatProvider provider = null) {
             TexturePoint result = Zero;
-            if (!String.IsNullOrWhiteSpace(vec)) {
-                string[] rawSource = vec.Split(_sep, StringSplitOptions.RemoveEmptyEntries);
+            if (!String.IsNullOrWhiteSpace(point)) {
+                string[] rawSource = point.Split(_sep, StringSplitOptions.RemoveEmptyEntries);
                 if (rawSource.Length == 2) {
                     result = new TexturePoint(Convert.ToInt32(rawSource[0], provider),
                         Convert.ToInt32(rawSource[1], provider));

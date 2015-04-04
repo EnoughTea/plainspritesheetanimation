@@ -5,16 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Unisa.TexturePacker {
+namespace Unisa {
     /// <summary> Contains information about a texture atlas exported from TexturePacker. </summary>
     [XmlType(TypeName = "TextureAtlas")]
     public class TexturePackerAtlas {
+        private static readonly char[] _numbers = "0123456789".ToCharArray();
+
         /// <summary> Initializes a new instance of the <see cref="TexturePackerAtlas" /> class. </summary>
         public TexturePackerAtlas() {
             Sprites = new List<TexturePackerSprite>();
         }
-
-        private static readonly char[] _numbers = "0123456789".ToCharArray();
 
         /// <summary> Gets or sets the path to the texture relative to the data file location. </summary>
         [XmlAttribute("imagePath")]
@@ -32,23 +32,24 @@ namespace Unisa.TexturePacker {
         [XmlElement("sprite", Type = typeof(TexturePackerSprite))]
         public List<TexturePackerSprite> Sprites { get; set; }
 
-        /// <summary> Creates an animation from the current atlas, collecting sprites into animation sequences 
-        /// by their name. Sprites with names distinguished by end number only (like "walking 1", "walking 2", 
-        /// "walking 3"...) will be gathered into the same sequence. </summary>
-        /// <param name="animCreator">Provides concrete type constructor for animation.</param>
-        /// <param name="seqCreator">Provides concrete type constructor for animation sequence.</param>
+        /// <summary>
+        ///     Creates an animation from the current atlas, collecting sprites into animation sequences
+        ///     by their name. Sprites with names distinguished by end number only (like "walking 1", "walking 2",
+        ///     "walking 3"...) will be gathered into the same sequence.
+        /// </summary>
+        /// <param name="animationCreator">Provides concrete type constructor for animation.</param>
+        /// <param name="sequenceCreator">Provides concrete type constructor for animation sequence.</param>
         /// <param name="frameCreator">Provides concrete type constructor for animation frame.</param>
         /// <returns> Created animation. </returns>
-        public IAnimation CreateAnimation(Func<IAnimation> animCreator = null, 
-            Func<IAnimationSequence> seqCreator = null,
-            Func<IAnimationFrame> frameCreator = null) {
-            if (animCreator == null) {  animCreator = () => new Animation(); }    
+        public IAnimation CreateAnimation(Func<IAnimation> animationCreator = null,
+            Func<IAnimationSequence> sequenceCreator = null, Func<IAnimationFrame> frameCreator = null) {
+            if (animationCreator == null) { animationCreator = () => new Animation(); }
 
-            var result = animCreator();
+            var result = animationCreator();
             result.TextureId = ImagePath;
 
             var sequenceData = GetSequenceData();
-            var sequences = CreateSequences(sequenceData, seqCreator, frameCreator);
+            var sequences = CreateSequences(sequenceData, sequenceCreator, frameCreator);
             foreach (var sequence in sequences) { result.Sequences.Add(sequence); }
 
             return result;
@@ -69,8 +70,10 @@ namespace Unisa.TexturePacker {
             return Sprites.Where(sprite => sprite.Name != null && sprite.Name.Contains(namePart));
         }
 
-        /// <summary> Collects sprites into sequences unified by name. Sprites with names like "walking east 1", 
-        /// "walking east 2", "walking east 3" will be gathered into same sequence. </summary>
+        /// <summary>
+        ///     Collects sprites into sequences unified by name. Sprites with names like "walking east 1",
+        ///     "walking east 2", "walking east 3" will be gathered into same sequence.
+        /// </summary>
         /// <returns> List of sprites corresponding to a single sequence. </returns>
         [Pure]
         private Dictionary<string, List<TexturePackerSprite>> GetSequenceData() {
@@ -80,7 +83,9 @@ namespace Unisa.TexturePacker {
                 int fileExtPos = name.LastIndexOf(".", StringComparison.Ordinal);
                 if (fileExtPos >= 0) { name = name.Substring(0, fileExtPos); }
 
-                if (!EndsWithDigit(name)) { AddToValues(sequencesData, name, sprite); } else {
+                if (!EndsWithDigit(name)) {
+                    AddToValues(sequencesData, name, sprite);
+                } else {
                     name = name.TrimEnd(_numbers).TrimEnd();
                     AddToValues(sequencesData, name, sprite);
                 }
@@ -88,9 +93,6 @@ namespace Unisa.TexturePacker {
 
             return sequencesData;
         }
-
-        private delegate IAnimationSequence AnimationSequenceMaker(string name, IEnumerable<IAnimationFrame> frames);
-        private delegate IAnimationFrame AnimationFrameMaker(TextureRegion source);
 
         private static IEnumerable<IAnimationSequence> CreateSequences(
             Dictionary<string, List<TexturePackerSprite>> sequenceData, Func<IAnimationSequence> seqCreator = null,
@@ -116,7 +118,7 @@ namespace Unisa.TexturePacker {
             return from kvp in sequenceData
                 let name = kvp.Key
                 let frames = kvp.Value.OrderBy(sprite => sprite.Name).Select(
-                    sprite => frameMaker(sprite.GetSource()))
+                    sprite => frameMaker(sprite.Source))
                 select sequenceMaker(name, frames);
         }
 
@@ -132,8 +134,10 @@ namespace Unisa.TexturePacker {
 #endif
         }
 
-        /// <summary>Adds the specified value to the list of the values held under the specified key.
-        ///  List will be created if it does not exits.</summary>
+        /// <summary>
+        ///     Adds the specified value to the list of the values held under the specified key.
+        ///     List will be created if it does not exits.
+        /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="target">The dictionary to add value into.</param>
@@ -151,5 +155,9 @@ namespace Unisa.TexturePacker {
 
             existing.Add(toAdd);
         }
+
+        private delegate IAnimationSequence AnimationSequenceMaker(string name, IEnumerable<IAnimationFrame> frames);
+
+        private delegate IAnimationFrame AnimationFrameMaker(TextureRegion source);
     }
 }

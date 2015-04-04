@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace Unisa {
+    /// <summary> Event handler for an animation sequence. </summary>
+    /// <param name="sender">Animation sequence which fired the event.</param>
+    public delegate void AnimationSequenceEventHandler(IAnimationSequence sender, EventArgs e);
+
     /// <summary> Interface for a sequence of frames. </summary>
+    [ContractClass(typeof(ContractForIAnimationSequence))]
     public interface IAnimationSequence {
         /// <summary>  Gets the name of this animation sequence. </summary>
         string Name { get; set; }
@@ -19,19 +25,17 @@ namespace Unisa {
         /// <summary> Gets or sets index of the current frame in the frame sequence. </summary>
         int CurrentFrameIndex { get; set; }
 
-        /// <summary>
-        ///     Gets or sets a value indicating whether or not this animation sequence plays in reverse.
-        /// </summary>
+        /// <summary>Gets or sets a value indicating whether or not this animation sequence plays in reverse.</summary>
         bool Reverse { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether the animation sequence is running.
-        ///     Can be used for pausing.
+        ///     Gets or sets a value indicating whether the animation sequence is running. Can be used for pausing.
         /// </summary>
         bool Animating { get; set; }
 
         /// <summary>
-        ///     Gets a value indicating whether this animation sequence is visible. Can be used for hiding.
+        ///     Gets or sets a value indicating whether this animation sequence is visible.
+        ///     Can be used for hiding.
         /// </summary>
         bool Visible { get; set; }
 
@@ -39,16 +43,16 @@ namespace Unisa {
         AnimationType AnimationType { get; set; }
 
         /// <summary>Gets or sets the value indicating whether to mirror this sequence when rendered, or not.</summary>
-        MirrorType Mirror { get; set; }
+        MirrorDirections Mirror { get; set; }
 
         /// <summary> Event which is raised when the animation is stopped. </summary>
-        event Action<IAnimationSequence> Stopped;
+        event AnimationSequenceEventHandler Stopped;
 
         /// <summary> Event which is raised when the animation is started. </summary>
-        event Action<IAnimationSequence> Started;
+        event AnimationSequenceEventHandler Started;
 
         /// <summary> Event which is raised when the play direction is changed. </summary>
-        event Action<IAnimationSequence> PlayDirectionChanged;
+        event AnimationSequenceEventHandler PlayDirectionChanged;
 
         /// <summary> Restarts the animation sequence. </summary>
         void Start();

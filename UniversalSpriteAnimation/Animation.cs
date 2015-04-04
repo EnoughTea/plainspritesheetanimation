@@ -8,19 +8,19 @@ namespace Unisa {
     /// <summary> Represents a set of animation sequences. </summary>
     [DataContract(Name = "anim"), KnownType(typeof(AnimationSequence)), DebuggerDisplay("{ToString()}")]
     public class Animation : IAnimation {
-        /// <summary> Gets all animation sequences for this animation. </summary>
-        [DataMember(Name = "seqs", Order = 100)]
-        public HashSet<IAnimationSequence> Sequences { get; private set; }
-
         /// <summary> Initializes a new instance of the <see cref="Animation" /> class. </summary>
         /// <param name="textureId">The texture ID.</param>
         /// <param name="sequences">The animation sequences. Sequences with duplicate names will be ignored.</param>
         public Animation(string textureId = null, IEnumerable<IAnimationSequence> sequences = null) {
             TextureId = textureId;
-            Sequences = (sequences != null) 
-                ? new HashSet<IAnimationSequence>(sequences) 
+            Sequences = (sequences != null)
+                ? new HashSet<IAnimationSequence>(sequences)
                 : new HashSet<IAnimationSequence>();
         }
+
+        /// <summary> Gets all animation sequences for this animation. </summary>
+        [DataMember(Name = "seqs", Order = 100)]
+        public HashSet<IAnimationSequence> Sequences { get; private set; }
 
         /// <summary> Gets the texture ID used to determine which texture to use for this animation. </summary>
         [DataMember(Name = "texId", Order = 1)]
@@ -29,7 +29,7 @@ namespace Unisa {
         /// <summary> Gets the sequence with the specified name. </summary>
         /// <param name="sequenceName">The name of the sequence to get.</param>
         /// <returns>Found sequence or null.</returns>
-        public IAnimationSequence Get(string sequenceName) {
+        public IAnimationSequence FindSequence(string sequenceName) {
             return Sequences.FirstOrDefault(sequence => sequence.Name == sequenceName);
         }
 

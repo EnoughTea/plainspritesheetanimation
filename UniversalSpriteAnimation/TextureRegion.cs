@@ -8,15 +8,14 @@ namespace Unisa {
     /// <summary> Represents a rectangle on a texture. Start at the top-left corner, Y axis grows upwards. </summary>
     [DataContract, DebuggerDisplay("{ToString()}")]
     public struct TextureRegion : IEquatable<TextureRegion> {
-        private static readonly char[] _sep = { ' ' };
-
+        private static readonly char[] _sep = {' '};
         public static readonly TextureRegion Empty = new TextureRegion();
 
-        public TextureRegion(TexturePoint coordinates, TextureSize size) 
+        public TextureRegion(TexturePoint coordinates, TextureSize size)
             : this(coordinates.X, coordinates.Y, size.Width, size.Height) {
         }
 
-        public TextureRegion(int x, int y, int width, int height) 
+        public TextureRegion(int x, int y, int width, int height)
             : this() {
             X = x;
             Y = y;
@@ -26,10 +25,13 @@ namespace Unisa {
 
         [DataMember(Name = "x")]
         public int X { get; private set; }
+
         [DataMember(Name = "y")]
         public int Y { get; private set; }
+
         [DataMember(Name = "w")]
         public int Width { get; private set; }
+
         [DataMember(Name = "h")]
         public int Height { get; private set; }
 
@@ -45,14 +47,14 @@ namespace Unisa {
         /// <summary> Gets the bottom side Y coordinate. </summary>
         public int Bottom { get { return Y - Height; } }
 
+        public bool Equals(TextureRegion other) {
+            return X == other.X && Y == other.Y && Width == other.Width && Height == other.Height;
+        }
+
         /// <summary> Returns a <see cref="String" /> that represents this instance. </summary>
         /// <returns> A <see cref="String" /> that represents this instance. </returns>
         public override string ToString() {
             return X + " " + Y + " " + Width + " " + Height;
-        }
-
-        public bool Equals(TextureRegion other) {
-            return X == other.X && Y == other.Y && Width == other.Width && Height == other.Height;
         }
 
         public override bool Equals(object obj) {
@@ -62,8 +64,10 @@ namespace Unisa {
         }
 
         /// <summary> Returns a hash code for this instance. </summary>
-        /// <returns> A hash code for this instance, suitable for use in hashing algorithms and data structures like 
-        /// a hash table. </returns>
+        /// <returns>
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like
+        ///     a hash table.
+        /// </returns>
         public override int GetHashCode() {
             unchecked {
                 var hashCode = X;
@@ -82,8 +86,10 @@ namespace Unisa {
             return !left.Equals(right);
         }
 
-        /// <summary> Calculates texture frames for given texture size. 
-        /// Frames are taken from the texture from left to right. </summary>
+        /// <summary>
+        ///     Calculates texture frames for given texture size.
+        ///     Frames are taken from the texture from left to right.
+        /// </summary>
         /// <param name="textureSize">The size of the texture containing all frames. </param>
         /// <param name="frameSize">The size of the each frame. If set to zero, will load entire texture.</param>
         /// <param name="startPoint">The starting point in pixels from which to parse frames.</param>
@@ -115,16 +121,17 @@ namespace Unisa {
         }
 
         /// <summary> Parses <see cref="TextureRegion" /> from the given string in "x y width height" format. </summary>
-        /// <param name="rect">The string containg rectangle data.</param>
+        /// <param name="region">The string containg region data.</param>
         /// <param name="provider">The format provider.</param>
         /// <returns>Parsed <see cref="TextureRegion" />.</returns>
         [Pure]
-        public static TextureRegion Parse(string rect, IFormatProvider provider = null) {
+        public static TextureRegion Parse(string region, IFormatProvider provider = null) {
             TextureRegion result = Empty;
-            if (!String.IsNullOrWhiteSpace(rect)) {
-                string[] rawSource = rect.Split(_sep, StringSplitOptions.RemoveEmptyEntries);
+            if (!String.IsNullOrWhiteSpace(region)) {
+                string[] rawSource = region.Split(_sep, StringSplitOptions.RemoveEmptyEntries);
                 if (rawSource.Length == 4) {
-                    result = new TextureRegion(Convert.ToInt32(rawSource[0], provider), Convert.ToInt32(rawSource[1], provider),
+                    result = new TextureRegion(Convert.ToInt32(rawSource[0], provider),
+                        Convert.ToInt32(rawSource[1], provider),
                         Convert.ToInt32(rawSource[2], provider), Convert.ToInt32(rawSource[3], provider));
                 }
             }
