@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Unisa {
@@ -199,7 +200,7 @@ namespace Unisa {
         ///     Calculates the maximum frame dimensions of all frames currently in the <see cref="Frames" /> list.
         /// </summary>
         /// <returns>Maximum frame dimensions; empty if no frames are present or if their sources are empty.</returns>
-        public TextureSize GetMaxFrameSize() {
+        public TextureSize GetFrameBounds() {
             int width = 0, height = 0;
             foreach (var frame in Frames) {
                 var source = frame.Source;
@@ -227,14 +228,25 @@ namespace Unisa {
             return result;
         }
 
-        /// <summary> Sets the amount of time each frame should display, in seconds. </summary>
-        /// <param name="time">The time for each frame to display.</param>
-        public void SetFramesDuration(float time) {
-            Contract.Requires(time >= 0);
-
-            foreach (var frame in Frames) { frame.Duration = time; }
+        /// <summary>Gets the combined duration for all frames in the sequence.</summary>
+        /// <returns>Combined duration for all frames in the sequence.</returns>
+        public float GetDuration() {
+            return Frames.Sum(frame => frame.Duration);
         }
 
+        /// <summary>Sets the new duration for the sequence, scaling individual frame durations.</summary>
+        public void SetDuration(float newDuration) {
+            Contract.Requires(newDuration >= 0);
+
+            float oldDuration = GetDuration();
+            foreach (var frame in Frames) {
+                if (oldDuration != 0) {
+                    frame.Duration = newDuration * (frame.Duration / oldDuration);
+                } else {
+                    frame.Duration = newDuration / Frames.Count;
+                }
+            }
+        }
 
         /// <summary> Returns a <see cref="String" /> that represents this instance. </summary>
         /// <returns> A <see cref="String" /> that represents this instance. </returns>

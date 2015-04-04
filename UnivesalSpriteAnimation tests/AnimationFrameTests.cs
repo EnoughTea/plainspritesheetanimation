@@ -5,7 +5,7 @@ namespace UnivesalSpriteAnimation_tests {
     [TestFixture]
     public class AnimationFrameTests {
         [Test]
-        public void WhenAnimationFrameIsCreatedItsDefaultPropertiesAreSensible() {
+        public void WhenFrameIsCreatedItsDefaultPropertiesAreSensible() {
             var frame = new AnimationFrame();
             Assert.AreEqual(frame.Duration, 0);
             Assert.AreEqual(frame.Origin, TexturePoint.Zero);
@@ -13,7 +13,7 @@ namespace UnivesalSpriteAnimation_tests {
         }
 
         [Test]
-        public void WhenAnimationFrameIsCreatedItsPropertiesAreSensible() {
+        public void WhenFrameIsCreatedItsPropertiesAreSensible() {
             var source = new TextureRegion(10, 10, 32, 32);
             var duration = 0.15f;
             var frame = new AnimationFrame(source, duration);
@@ -23,7 +23,7 @@ namespace UnivesalSpriteAnimation_tests {
         }
 
         [Test]
-        public void WhenAnimationFrameIsClonedItsCloneIsValid() {
+        public void WhenFrameIsClonedItsCloneIsValid() {
             var frame = new AnimationFrame(new TextureRegion(10, 10, 32, 32), 0.15f);
             var clone = frame.Clone();
             Assert.That(!ReferenceEquals(frame, clone));

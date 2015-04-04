@@ -51,7 +51,7 @@ r => 'y' only set if sprite is rotated
         private TexturePackerAtlas _correspondingAtlas;
 
         [Test]
-        public void WhenTextureAtlasIsLoadedItsOwnParamsAreValid() {
+        public void WhenAtlasIsLoadedItsOwnParamsAreValid() {
             using (var xml = MakeStream(TexturePackerExportedXml)) {
                 var atlasData = TexturePackerAtlas.Load(xml);
 
@@ -62,7 +62,7 @@ r => 'y' only set if sprite is rotated
         }
 
         [Test]
-        public void WhenTextureAtlasIsLoadedItsSpritesAreLoadedCorrectly() {
+        public void WhenTAtlasIsLoadedItsSpritesAreLoadedAsWell() {
             using (var xml = MakeStream(TexturePackerExportedXml)) {
                 var atlasData = TexturePackerAtlas.Load(xml);
 

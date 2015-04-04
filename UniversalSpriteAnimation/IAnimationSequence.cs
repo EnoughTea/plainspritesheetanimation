@@ -73,7 +73,14 @@ namespace Unisa {
         ///     Calculates the maximum frame dimensions of all frames currently in the <see cref="Frames" /> list.
         /// </summary>
         /// <returns>Maximum frame dimensions; empty if no frames are present or if their sources are empty.</returns>
-        TextureSize GetMaxFrameSize();
+        TextureSize GetFrameBounds();
+
+        /// <summary>Sets the new duration for the sequence, scaling individual frame durations.</summary>
+        void SetDuration(float newDuration);
+
+        /// <summary>Gets the combined duration for all frames in the sequence.</summary>
+        /// <returns>Combined duration for all frames in the sequence.</returns>
+        float GetDuration();
 
         /// <summary> Creates a clone of this sequence. </summary>
         /// <param name="name">The name of the cloned sequence.</param>
