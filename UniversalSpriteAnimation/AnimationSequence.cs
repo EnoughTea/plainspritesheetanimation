@@ -55,6 +55,10 @@ namespace Unisa {
                     case AnimationType.Once:
                     case AnimationType.OnceHoldLast:
                     case AnimationType.OnceDisappear:
+                        if (IsBeyondIndex(value)) {
+
+                        }
+
                         if (Reverse && value <= -1) {
                             _currentFrameIndex = (AnimationType == AnimationType.Once) ? Frames.Count - 1 : 0;
                             Animating = false;
@@ -76,14 +80,13 @@ namespace Unisa {
                         break;
 
                     case AnimationType.PingPong:
+                        value = Math.Abs(value);
                         value %= Frames.Count * 2;
                         if (value >= Frames.Count) { value = (2 * Frames.Count) - 1 - value; }
 
                         _currentFrameIndex = value;
                         // check for the ping-ponging.
-                        if (Reverse && value == 0) {
-                            Reverse = false;
-                        } else if (Reverse == false && value == Frames.Count - 1) { Reverse = true; }
+                        if (IsLastIndex(_currentFrameIndex)) { Reverse = !Reverse; }
 
                         break;
 
@@ -100,9 +103,10 @@ namespace Unisa {
             get { return _reverse; }
 
             set {
-                bool doEvent = (value != _reverse);
-                _reverse = value;
-                if (doEvent) { PlayDirectionChanged(this); }
+                if (_reverse != value) {
+                    _reverse = value;
+                    PlayDirectionChanged(this);
+                }
             }
         }
 
@@ -118,15 +122,34 @@ namespace Unisa {
                 _animating = value;
 
                 // If we're resuming 'once' animation sequences on their last frame, rewind them back, 
-                // since it's most probably what user wants:
-                if (_animating && (AnimationType == AnimationType.Once || AnimationType == AnimationType.OnceHoldLast ||
-                                  AnimationType == AnimationType.OnceDisappear)) {
-                    if (Reverse && _currentFrameIndex <= 0) {
-                        _currentFrameIndex = Frames.Count - 1;
-                    } else if (!Reverse && _currentFrameIndex >= Frames.Count - 1) { _currentFrameIndex = 0; }
+                // since it's most probably what caller wants.
+                if (_animating && RunningOnce) {
+                    if (IsLastIndex(_currentFrameIndex)) { _currentFrameIndex = GetFirstIndex(); }
                 }
 
                 if (doEvent) { if (_animating) { Started(this); } else { Stopped(this); } }
+            }
+        }
+
+        private int GetLastIndex() {
+            return !Reverse ? Math.Max(0, Frames.Count - 1) : 0;
+        }
+        private int GetFirstIndex() {
+            return !Reverse ? 0 : Math.Max(0, Frames.Count - 1);
+        }
+
+        private bool IsLastIndex(int index) {
+            return (Reverse && index == 0) || (!Reverse && index == Math.Max(0, Frames.Count - 1));
+        }
+
+        private bool IsBeyondIndex(int index) {
+            return (Reverse && index <= -1) || (!Reverse && index == Frames.Count);
+        }
+
+        private bool RunningOnce {
+            get {
+                return AnimationType == AnimationType.Once || AnimationType == AnimationType.OnceHoldLast ||
+                       AnimationType == AnimationType.OnceDisappear;
             }
         }
 
@@ -163,7 +186,7 @@ namespace Unisa {
 
         /// <summary> Restarts the animation sequence. </summary>
         public void Start() {
-            CurrentFrameIndex = (Reverse) ? Math.Max(0, Frames.Count - 1) : 0;
+            CurrentFrameIndex = GetFirstIndex();
             Animating = true;
             Visible = true;
         }
@@ -173,7 +196,7 @@ namespace Unisa {
         ///     use <see cref="Animating" /> property instead.
         /// </summary>
         public void Stop() {
-            CurrentFrameIndex = (Reverse) ? Math.Max(0, Frames.Count - 1) : 0;
+            CurrentFrameIndex = GetFirstIndex();
             Animating = false;
             Visible = false;
         }
@@ -254,7 +277,8 @@ namespace Unisa {
             string name = !String.IsNullOrEmpty(Name) ? Name : "<nameless>";
             string visible = Visible ? "visible" : "invisible";
             string animating = Animating ? "active" : "inactive";
-            return name + ", " + Frames.Count + " frames (" + visible + ", " + animating +")";
+            return name + ", " + "frame index is " + CurrentFrameIndex + " out of " + Frames.Count + " frames (" +
+                visible + ", " + animating +")";
         }
     }
 }

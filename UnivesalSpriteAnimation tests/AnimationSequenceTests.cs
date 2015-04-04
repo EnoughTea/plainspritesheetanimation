@@ -74,46 +74,42 @@ namespace UnivesalSpriteAnimation_tests {
             }
         }
 
-        private static void AdvanceAllFrames(IAnimationSequence sequence) {
-            int totalFrames = sequence.Frames.Count;
-            int firstIndex = sequence.Reverse ? totalFrames - 1 : 0;
-            Assert.That(sequence.CurrentFrameIndex == firstIndex);
-            Assert.That(sequence.CurrentFrame == sequence.Frames[firstIndex]);
-            Assert.IsTrue(sequence.Animating);
-            Assert.IsTrue(sequence.Visible);
-
-            Action<int> verifyFrame = index => {
-                if (index != totalFrames - 1 && index != 0) {
-                    Assert.That(sequence.CurrentFrameIndex == index);
-                    Assert.That(sequence.CurrentFrame == sequence.Frames[index]);
-                    Assert.IsTrue(sequence.Animating);
-                    Assert.IsTrue(sequence.Visible);
-                }
-            };
-
-            if (sequence.Reverse) {
-                for (int i = firstIndex; i >= 0; i--) {
-                    sequence.AdvanceFrame();
-                    int index = sequence.Reverse ? i - 1 : (i + 1);
-                    index = ClampIndex(index, totalFrames);
-                    verifyFrame(index);
-                }
-            } else {
-                for (int i = 0; i < totalFrames; i++) {
-                    sequence.AdvanceFrame();
-                    int index = sequence.Reverse ? totalFrames - i : i + 1;
-                    index = ClampIndex(index, totalFrames);
-                    verifyFrame(index);
-                }
-            }
+        [Test]
+        public void WhenAnimationTypeOnceIsResumedItStartsFromAppropriateFrame() {
+            testSequence.AnimationType = AnimationType.Once;
+            testSequence.Start();
+            AdvanceToEnd(testSequence);
+            testSequence.Animating = true;
+            Assert.That(testSequence.CurrentFrameIndex == 0);
         }
 
-        private static int ClampIndex(int index, int frameCount) {
-            int value = index;
-            if (index >= frameCount) { value = 0; }
-            if (index < 0) { value = frameCount - 1; }
+        [Test]
+        public void WhenAnimationTypeOnceReverseIsResumedItStartsFromAppropriateFrame() {
+            testSequence.AnimationType = AnimationType.Once;
+            testSequence.Reverse = true;
+            testSequence.Start();
+            AdvanceToEnd(testSequence);
+            testSequence.Animating = true;
+            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
+        }
 
-            return value;
+        [Test]
+        public void WhenAnimationTypeOnceDisappearIsResumedItStartsFromAppropriateFrame() {
+            testSequence.AnimationType = AnimationType.OnceDisappear;
+            testSequence.Start();
+            AdvanceToEnd(testSequence);
+            testSequence.Animating = true;
+            Assert.That(testSequence.CurrentFrameIndex == 0);
+        }
+
+        [Test]
+        public void WhenAnimationTypeOnceDisappearReverseIsResumedItStartsFromAppropriateFrame() {
+            testSequence.AnimationType = AnimationType.OnceDisappear;
+            testSequence.Reverse = true;
+            testSequence.Start();
+            AdvanceToEnd(testSequence);
+            testSequence.Animating = true;
+            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
         }
 
         [Test]
@@ -121,10 +117,10 @@ namespace UnivesalSpriteAnimation_tests {
             testSequence.AnimationType = AnimationType.Once;
             testSequence.Reverse = true;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
-            int lastFrameIndex = testSequence.Frames.Count - 1;
-            Assert.That(testSequence.CurrentFrameIndex == lastFrameIndex);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[lastFrameIndex]);
+            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
+            AdvanceFrameAndVerifyIndex(testSequence, testSequence.Frames.Count - 1);
             Assert.IsFalse(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
@@ -134,9 +130,10 @@ namespace UnivesalSpriteAnimation_tests {
             testSequence.AnimationType = AnimationType.OnceHoldLast;
             testSequence.Reverse = true;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
-            Assert.That(testSequence.CurrentFrameIndex == 0);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[0]);
+            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
             Assert.IsFalse(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
@@ -146,9 +143,10 @@ namespace UnivesalSpriteAnimation_tests {
             testSequence.AnimationType = AnimationType.OnceDisappear;
             testSequence.Reverse = true;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
-            Assert.That(testSequence.CurrentFrameIndex == 0);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[0]);
+            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
             Assert.IsFalse(testSequence.Animating);
             Assert.IsFalse(testSequence.Visible);
         }
@@ -159,15 +157,12 @@ namespace UnivesalSpriteAnimation_tests {
             testSequence.AnimationType = AnimationType.Looping;
             testSequence.Reverse = true;
             testSequence.Start();
-            int lastFrameIndex = testSequence.Frames.Count - 1;
-            AdvanceAllFrames(testSequence);
-            Assert.That(testSequence.CurrentFrameIndex == lastFrameIndex);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[lastFrameIndex]);
-            Assert.IsTrue(testSequence.Animating);
-            Assert.IsTrue(testSequence.Visible);
-            AdvanceAllFrames(testSequence);
-            Assert.That(testSequence.CurrentFrameIndex == lastFrameIndex);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[lastFrameIndex]);
+            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
             Assert.IsTrue(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
@@ -177,31 +172,24 @@ namespace UnivesalSpriteAnimation_tests {
             testSequence.AnimationType = AnimationType.PingPong;
             testSequence.Reverse = true;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
-            Assert.That(testSequence.CurrentFrameIndex == 1);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[1]);
-            Assert.IsTrue(testSequence.Animating);
-            Assert.IsTrue(testSequence.Visible);
-            testSequence.AdvanceFrame();
-            Assert.That(testSequence.CurrentFrameIndex == 2);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[2]);
-            Assert.IsTrue(testSequence.Animating);
-            Assert.IsTrue(testSequence.Visible);
-            testSequence.AdvanceFrame();
-            Assert.That(testSequence.CurrentFrameIndex == 1);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[1]);
+            Assert.That(testSequence.CurrentFrameIndex == testSequence.Frames.Count - 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
             Assert.IsTrue(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
-
 
         [Test]
         public void WhenAnimationTypeOnceFrameIsAdvancedItsPropertiesAreProperlyChanged() {
             testSequence.AnimationType = AnimationType.Once;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
             Assert.That(testSequence.CurrentFrameIndex == 0);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[0]);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
             Assert.IsFalse(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
@@ -210,10 +198,10 @@ namespace UnivesalSpriteAnimation_tests {
         public void WhenAnimationTypeOnceHoldLastFrameIsAdvancedItsPropertiesAreProperlyChanged() {
             testSequence.AnimationType = AnimationType.OnceHoldLast;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
-            int lastFrameIndex = testSequence.Frames.Count - 1;
-            Assert.That(testSequence.CurrentFrameIndex == lastFrameIndex);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[lastFrameIndex]);
+            Assert.That(testSequence.CurrentFrameIndex == 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
             Assert.IsFalse(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
@@ -222,10 +210,10 @@ namespace UnivesalSpriteAnimation_tests {
         public void WhenAnimationTypeOnceDisappearFrameIsAdvancedItsPropertiesAreProperlyChanged() {
             testSequence.AnimationType = AnimationType.OnceDisappear;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
-            int lastFrameIndex = testSequence.Frames.Count - 1;
-            Assert.That(testSequence.CurrentFrameIndex == lastFrameIndex);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[lastFrameIndex]);
+            Assert.That(testSequence.CurrentFrameIndex == 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
             Assert.IsFalse(testSequence.Animating);
             Assert.IsFalse(testSequence.Visible);
         }
@@ -234,14 +222,12 @@ namespace UnivesalSpriteAnimation_tests {
         public void WhenAnimationTypeLoopingFrameIsAdvancedItsPropertiesAreProperlyChanged() {
             testSequence.AnimationType = AnimationType.Looping;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
             Assert.That(testSequence.CurrentFrameIndex == 0);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[0]);
-            Assert.IsTrue(testSequence.Animating);
-            Assert.IsTrue(testSequence.Visible);
-            AdvanceAllFrames(testSequence);
-            Assert.That(testSequence.CurrentFrameIndex == 0);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[0]);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
             Assert.IsTrue(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
@@ -250,19 +236,12 @@ namespace UnivesalSpriteAnimation_tests {
         public void WhenAnimationTypePingPongFrameIsAdvancedItsPropertiesAreProperlyChanged() {
             testSequence.AnimationType = AnimationType.PingPong;
             testSequence.Start();
-            AdvanceAllFrames(testSequence);
-            Assert.That(testSequence.CurrentFrameIndex == 1);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[1]);
-            Assert.IsTrue(testSequence.Animating);
-            Assert.IsTrue(testSequence.Visible);
-            testSequence.AdvanceFrame();
             Assert.That(testSequence.CurrentFrameIndex == 0);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[0]);
-            Assert.IsTrue(testSequence.Animating);
-            Assert.IsTrue(testSequence.Visible);
-            testSequence.AdvanceFrame();
-            Assert.That(testSequence.CurrentFrameIndex == 1);
-            Assert.That(testSequence.CurrentFrame == testSequence.Frames[1]);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 2);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
+            AdvanceFrameAndVerifyIndex(testSequence, 0);
+            AdvanceFrameAndVerifyIndex(testSequence, 1);
             Assert.IsTrue(testSequence.Animating);
             Assert.IsTrue(testSequence.Visible);
         }
@@ -296,6 +275,22 @@ namespace UnivesalSpriteAnimation_tests {
                 new AnimationFrame(new TextureRegion(0, 16, 32, 8), 0.2f)
             };
             testSequence = new AnimationSequence(name, frames);
+        }
+
+        private static void AdvanceFrameAndVerifyIndex(IAnimationSequence sequence, int expectedIndex) {
+            sequence.AdvanceFrame();
+            Assert.That(sequence.CurrentFrameIndex == expectedIndex);
+            Assert.That(sequence.CurrentFrame == sequence.Frames[expectedIndex]);
+        }
+
+        private static void AdvanceToEnd(IAnimationSequence sequence) {
+            if (sequence.AnimationType == AnimationType.Once || sequence.AnimationType == AnimationType.OnceHoldLast ||
+                sequence.AnimationType == AnimationType.OnceDisappear) {
+                for (int i = 0; i < sequence.Frames.Count; i++) {
+                    sequence.AdvanceFrame();
+                }
+            }
+            else throw new ArgumentException("Can't run to end an infinite animation type", "sequence");
         }
     }
 }
