@@ -1,7 +1,7 @@
 ﻿# Plain sprite-sheet animation library
 
-Plain sprite-sheet animation library is low-level library for a sprite-sheet 2D animation support (who would have thought?). 
-Manages all information needed to draw a sprite to screen; how exactly it is drawn is up to user.
+Plain sprite sheet animation library is barebone library for a sprite sheet 2D animation support.
+It manages all information needed to draw a frame to screen; how exactly it is drawn is up to user.
 
 I made this thing for myself, so it is not supposed to be a complex framework, but perhaps someone would find it useful.
 
