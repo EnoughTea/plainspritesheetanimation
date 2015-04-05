@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Sequences = System.Collections.Generic.IEnumerable<PlainSpritesheetAnimation.IAnimationSequence>;
 
@@ -9,6 +10,8 @@ namespace PlainSpritesheetAnimation {
         /// <summary>Creates a clone of this animation.</summary>
         /// <returns> A clone of this animation. </returns>
         public static Sequences CloneSequences(this Sequences sequences) {
+            Contract.Requires(sequences != null);
+
             return sequences.Select(sequence => sequence.Clone(sequence.Name));
         }
 
@@ -17,6 +20,8 @@ namespace PlainSpritesheetAnimation {
         /// <param name="sequenceName">The name of the sequence to get.</param>
         /// <returns>Found sequence or null.</returns>
         public static IAnimationSequence FindSequenceByName(this Sequences sequences, string sequenceName) {
+            Contract.Requires(sequences != null);
+
             return sequences.FirstOrDefault(sequence => sequence.Name == sequenceName);
         }
 
@@ -24,6 +29,8 @@ namespace PlainSpritesheetAnimation {
         /// <param name="sequences">Animation sequences.</param>
         /// <returns> Enumeration of the currently running animation sequences. </returns>
         public static Sequences GetAnimatingSequences(this Sequences sequences) {
+            Contract.Requires(sequences != null);
+
             return sequences.Where(sequence => sequence.Animating);
         }
 
@@ -31,12 +38,16 @@ namespace PlainSpritesheetAnimation {
         /// <param name="sequences">Animation sequences.</param>
         /// <returns> Enumeration of the currently visible animation sequences.</returns>
         public static IEnumerable<IAnimationSequence> GetVisibleSequences(this Sequences sequences) {
+            Contract.Requires(sequences != null);
+
             return sequences.Where(sequence => sequence.Visible);
         }
 
         /// <summary>Gets the biggest current frame dimensions for all visible sequences.</summary>
         /// <returns>Biggest current frame dimensions for all visible sequences.</returns>
         public static TextureSize GetVisibleFrameBounds(this Sequences sequences) {
+            Contract.Requires(sequences != null);
+
             int maxWidth = 0, maxHeight = 0;
             foreach (var sequence in sequences.GetVisibleSequences()) {
                 if (sequence.CurrentFrame != null) {
@@ -52,12 +63,16 @@ namespace PlainSpritesheetAnimation {
         /// <param name="sequences">Animation sequences.</param>
         /// <param name="delta">The amount of time passed between updates.</param>
         public static void UpdateSequences(this Sequences sequences, float delta) {
+            Contract.Requires(sequences != null);
+
             foreach (var sequence in sequences) { sequence.Update(delta); }
         }
 
         /// <summary> Gets all texture IDs used by these animation sequences. </summary>
         /// <param name="sequences">Animation sequences.</param>
         public static IEnumerable<string> GetUsedTextureIds(this Sequences sequences) {
+            Contract.Requires(sequences != null);
+
             return sequences.GroupBy(sequence => sequence.TextureId)
                             .Select(group => group.First().TextureId)
                             .Where(texId => !String.IsNullOrEmpty(texId));

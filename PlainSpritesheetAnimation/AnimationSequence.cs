@@ -13,8 +13,8 @@ namespace PlainSpritesheetAnimation {
         [DataMember(Name = "cfi", IsRequired = false, EmitDefaultValue = false, Order = 10)] private int
             _currentFrameIndex;
 
-        [DataMember(Name = "ft", IsRequired = false, EmitDefaultValue = false, Order = 10)] private float _frameTime;
-        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 10)] private bool _reverse;
+        private float _frameTime;
+        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 6)] private bool _reverse;
 
         /// <summary> Initializes a new instance of the <see cref="AnimationSequence" /> class. </summary>
         /// <param name="name">The animation sequence name.</param>
@@ -188,15 +188,16 @@ namespace PlainSpritesheetAnimation {
         /// <param name="delta">The amount of time passed between updates.</param>
         public void Update(float delta) {
             var currentFrame = CurrentFrame;
-            if (currentFrame == null || currentFrame.Duration <= 0) {
-                Stop();
-                return;
-            }
-
+            if (currentFrame == null) { return; }
+            
             if (Animating) {
-                _frameTime += delta;
-                while (_frameTime >= currentFrame.Duration) {
-                    _frameTime -= currentFrame.Duration;
+                if (currentFrame.Duration > 0) {
+                    _frameTime += delta;
+                    while (_frameTime >= currentFrame.Duration) {
+                        _frameTime -= currentFrame.Duration;
+                        AdvanceFrame();
+                    }
+                } else {
                     AdvanceFrame();
                 }
             }
@@ -234,13 +235,14 @@ namespace PlainSpritesheetAnimation {
             return result;
         }
 
-        /// <summary>Gets the combined duration for all frames in the sequence.</summary>
-        /// <returns>Combined duration for all frames in the sequence.</returns>
+        /// <summary>Gets the combined duration in seconds for all frames in the sequence.</summary>
+        /// <returns>Combined duration in seconds for all frames in the sequence.</returns>
         public float GetDuration() {
             return Frames.Sum(frame => frame.Duration);
         }
 
-        /// <summary>Sets the new duration for the sequence, scaling individual frame durations.</summary>
+        /// <summary>Sets the new duration in seconds for the sequence, scaling individual frame durations.</summary>
+        /// <remarks>If every frame duration is 0, new duration will be distributed evenly.</remarks>
         public void SetDuration(float newDuration) {
             float oldDuration = GetDuration();
             foreach (var frame in Frames) {
