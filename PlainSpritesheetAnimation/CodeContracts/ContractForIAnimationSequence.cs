@@ -6,6 +6,7 @@ namespace PlainSpritesheetAnimation {
     [ContractClassFor(typeof(IAnimationSequence))]
     internal abstract class ContractForIAnimationSequence : IAnimationSequence {
         public string Name { get; set; }
+        public string TextureId { get; set; }
 
         public List<IAnimationFrame> Frames {
             get {

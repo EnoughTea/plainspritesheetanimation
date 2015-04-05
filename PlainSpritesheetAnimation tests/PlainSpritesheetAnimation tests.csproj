@@ -74,6 +74,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PlainSpritesheetAnimation\PlainSpritesheetAnimation.csproj">
+      <Project>{fd3c9fde-fcb1-49aa-8105-b8ddc3647d84}</Project>
+      <Name>PlainSpritesheetAnimation</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

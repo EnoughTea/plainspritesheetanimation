@@ -122,9 +122,6 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animation.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AnimationFrame.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -134,22 +131,17 @@
     <Compile Include="AnimationType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CodeContracts\ContractForIAnimation.cs" />
     <Compile Include="CodeContracts\ContractForIAnimationFrame.cs" />
     <Compile Include="CodeContracts\ContractForIAnimationSequence.cs" />
+    <Compile Include="EnumerableAnimationSequenceExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IAnimation.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IAnimationFrame.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IAnimationSequence.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MirrorDirections.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="MirrorDirections.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TexturePacker\TexturePackerAtlas.cs" />
     <Compile Include="TexturePacker\TexturePackerSprite.cs" />

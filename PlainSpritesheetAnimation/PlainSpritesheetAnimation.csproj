@@ -123,17 +123,15 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animation.cs" />
     <Compile Include="AnimationFrame.cs" />
     <Compile Include="AnimationSequence.cs" />
     <Compile Include="AnimationType.cs" />
-    <Compile Include="CodeContracts\ContractForIAnimation.cs" />
     <Compile Include="CodeContracts\ContractForIAnimationFrame.cs" />
     <Compile Include="CodeContracts\ContractForIAnimationSequence.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IAnimation.cs" />
     <Compile Include="IAnimationFrame.cs" />
     <Compile Include="IAnimationSequence.cs" />
+    <Compile Include="EnumerableAnimationSequenceExtensions.cs" />
     <Compile Include="MirrorDirections.cs" />
     <Compile Include="TexturePacker\TexturePackerSprite.cs" />
     <Compile Include="TexturePacker\TexturePackerAtlas.cs" />

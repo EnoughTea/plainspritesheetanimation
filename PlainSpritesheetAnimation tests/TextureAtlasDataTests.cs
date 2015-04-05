@@ -94,12 +94,15 @@ r => 'y' only set if sprite is rotated
 
         [Test]
         public void WhenAnimationIsCreatedFromTextureAtlasItIsValid() {
-            var createdAnimation = _correspondingAtlas.CreateAnimation();
-            Assert.That(createdAnimation.TextureId == _correspondingAtlas.ImagePath);
-            Assert.That(createdAnimation.Sequences.Count == 8);
-            Assert.That(!createdAnimation.GetVisibleSequences().Any());
-            Assert.That(!createdAnimation.GetAnimatingSequences().Any());
-            Assert.That(createdAnimation.GetMaxVisibleFrameSize() == TextureSize.Zero);
+            var sequences = _correspondingAtlas.CreateAnimationSequences().ToList();
+            foreach (var sequence in sequences) {
+                Assert.That(sequence.TextureId == _correspondingAtlas.ImagePath);
+            }
+            
+            Assert.That(sequences.Count == 8);
+            Assert.That(!sequences.GetVisibleSequences().Any());
+            Assert.That(!sequences.GetAnimatingSequences().Any());
+            Assert.That(sequences.GetVisibleFrameBounds() == TextureSize.Zero);
         }
 
         [SetUp]

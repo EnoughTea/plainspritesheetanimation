@@ -13,6 +13,9 @@ namespace PlainSpritesheetAnimation {
         /// <summary>  Gets the name of this animation sequence. </summary>
         string Name { get; set; }
 
+        /// <summary> Gets the texture ID determining which texture to use for this animation sequence. </summary>
+        string TextureId { get; set; }
+
         /// <summary> Gets the frames this sequence consist of. </summary>
         List<IAnimationFrame> Frames { get; }
 

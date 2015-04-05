@@ -10,11 +10,11 @@ namespace PlainSpritesheetAnimation {
     public class AnimationSequence : IAnimationSequence {
         [DataMember(Name = "a", IsRequired = false, EmitDefaultValue = false, Order = 5)] private bool _animating;
 
-        [DataMember(Name = "cfi", IsRequired = false, EmitDefaultValue = false, Order = 7)] private int
+        [DataMember(Name = "cfi", IsRequired = false, EmitDefaultValue = false, Order = 10)] private int
             _currentFrameIndex;
 
-        [DataMember(Name = "ft", IsRequired = false, EmitDefaultValue = false, Order = 8)] private float _frameTime;
-        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 6)] private bool _reverse;
+        [DataMember(Name = "ft", IsRequired = false, EmitDefaultValue = false, Order = 10)] private float _frameTime;
+        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 10)] private bool _reverse;
 
         /// <summary> Initializes a new instance of the <see cref="AnimationSequence" /> class. </summary>
         /// <param name="name">The animation sequence name.</param>
@@ -29,6 +29,10 @@ namespace PlainSpritesheetAnimation {
         /// <summary>  Gets the name of this animation sequence. </summary>
         [DataMember(Name = "name", Order = 0)]
         public string Name { get; set; }
+
+        /// <summary> Gets the texture ID determining which texture to use for this animation sequence. </summary>
+        [DataMember(Name = "texId", Order = 1)]
+        public string TextureId { get; set; }
 
         /// <summary> Gets the frames this sequence consist of. </summary>
         [DataMember(Name = "frames", Order = 100)]
@@ -139,11 +143,11 @@ namespace PlainSpritesheetAnimation {
         public bool Visible { get; set; }
 
         /// <summary> Gets or sets a type of animation for this sequence. </summary>
-        [DataMember(Name = "t", EmitDefaultValue = false, IsRequired = false, Order = 1)]
+        [DataMember(Name = "t", EmitDefaultValue = false, IsRequired = false, Order = 2)]
         public AnimationType AnimationType { get; set; }
 
         /// <summary>Gets or sets the value indicating whether to mirror this sequence when rendered, or not.</summary>
-        [DataMember(Name = "m", EmitDefaultValue = false, IsRequired = false, Order = 2)]
+        [DataMember(Name = "m", EmitDefaultValue = false, IsRequired = false, Order = 3)]
         public MirrorDirections Mirror { get; set; }
 
         /// <summary> Event which is raised when the animation is stopped. </summary>

@@ -5,8 +5,8 @@ namespace PlainSpritesheetAnimation {
     [Flags]
     public enum MirrorDirections {
         None = 0,
-        Vertically = 1,
-        Horizontally = 2,
-        Both = Vertically | Horizontally
+        Vertical = 1,
+        Horizontal = 2,
+        Both = Vertical | Horizontal
     }
 }
