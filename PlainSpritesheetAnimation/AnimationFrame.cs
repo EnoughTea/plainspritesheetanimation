@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Represents a single animation frame. </summary>
     [DataContract(Name = "frame"), DebuggerDisplay("{ToString()}")]
     public class AnimationFrame : IAnimationFrame {

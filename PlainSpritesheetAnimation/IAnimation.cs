@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Interface for a managing class for animation sequences. </summary>
     [ContractClass(typeof(ContractForIAnimation))]
     public interface IAnimation {

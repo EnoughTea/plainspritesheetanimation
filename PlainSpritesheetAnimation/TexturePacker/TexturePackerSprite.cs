@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Contains information about a single sprite. </summary>
     [XmlType(TypeName = "sprite")]
     public class TexturePackerSprite {

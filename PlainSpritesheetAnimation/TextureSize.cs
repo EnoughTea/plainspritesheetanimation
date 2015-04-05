@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Represents a size used to measure textures and their regions. </summary>
     [DataContract, DebuggerDisplay("{ToString()}")]
     public struct TextureSize : IEquatable<TextureSize> {

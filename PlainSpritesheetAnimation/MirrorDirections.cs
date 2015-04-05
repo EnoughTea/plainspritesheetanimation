@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Defines possible ways to mirror an animation sequence. </summary>
     [Flags]
     public enum MirrorDirections {

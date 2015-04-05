@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Contains information about a texture atlas exported from TexturePacker. </summary>
     [XmlType(TypeName = "TextureAtlas")]
     public class TexturePackerAtlas {

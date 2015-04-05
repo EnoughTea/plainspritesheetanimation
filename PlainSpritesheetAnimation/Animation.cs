@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Represents a set of animation sequences. </summary>
     [DataContract(Name = "anim"), KnownType(typeof(AnimationSequence)), DebuggerDisplay("{ToString()}")]
     public class Animation : IAnimation {

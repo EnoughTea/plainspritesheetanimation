@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     [ContractClassFor(typeof(IAnimationFrame))]
     internal abstract class ContractForIAnimationFrame : IAnimationFrame {
         public TextureRegion Source { get; set; }

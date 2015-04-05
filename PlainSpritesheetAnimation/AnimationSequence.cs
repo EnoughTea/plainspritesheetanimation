@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Represents a sequence of frames. </summary>
     [DataContract(Name = "seq"), KnownType(typeof(AnimationFrame)), DebuggerDisplay("{ToString()}")]
     public class AnimationSequence : IAnimationSequence {
@@ -54,7 +54,6 @@ namespace Unisa {
                             _currentFrameIndex = GetFirstIndex();
                             Animating = false;
                         }
-
                         break;
 
                     case AnimationType.OnceHoldLast:
@@ -181,8 +180,8 @@ namespace Unisa {
             Visible = false;
         }
 
-        /// <summary> Updates animation sequence using the specified delta time between game frames. </summary>
-        /// <param name="delta">The amount of time passed between game frames.</param>
+        /// <summary> Updates animation sequence using the specified delta time between update calls. </summary>
+        /// <param name="delta">The amount of time passed between updates.</param>
         public void Update(float delta) {
             var currentFrame = CurrentFrame;
             if (currentFrame == null || currentFrame.Duration <= 0) {
@@ -241,7 +240,7 @@ namespace Unisa {
         public void SetDuration(float newDuration) {
             float oldDuration = GetDuration();
             foreach (var frame in Frames) {
-                if (Math.Abs(oldDuration) > 0.001f) {
+                if (Math.Abs(oldDuration) > 0.001f) {   // <0.001 is considered 0, since it is too short of a duration.
                     frame.Duration = newDuration * (frame.Duration / oldDuration);
                 } else {
                     frame.Duration = newDuration / Frames.Count;
@@ -249,13 +248,13 @@ namespace Unisa {
             }
         }
 
-        /// <summary> Returns a <see cref="String" /> that represents this instance. </summary>
-        /// <returns> A <see cref="String" /> that represents this instance. </returns>
+        /// <summary> Returns a <see cref="string" /> that represents this instance. </summary>
+        /// <returns> A <see cref="string" /> that represents this instance. </returns>
         public override string ToString() {
             string name = !String.IsNullOrEmpty(Name) ? Name : "<nameless>";
             string visible = Visible ? "visible" : "invisible";
             string animating = Animating ? "active" : "inactive";
-            return name + ", " + "frame index is " + CurrentFrameIndex + " out of " + Frames.Count + " frames (" +
+            return name + ": " + "frame index is " + CurrentFrameIndex + " out of " + Frames.Count + " frames (" +
                    visible + ", " + animating + ")";
         }
 

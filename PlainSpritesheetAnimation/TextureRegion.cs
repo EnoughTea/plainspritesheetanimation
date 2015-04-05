@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Represents a rectangle on a texture. Start at the top-left corner, Y axis grows upwards. </summary>
     [DataContract, DebuggerDisplay("{ToString()}")]
     public struct TextureRegion : IEquatable<TextureRegion> {

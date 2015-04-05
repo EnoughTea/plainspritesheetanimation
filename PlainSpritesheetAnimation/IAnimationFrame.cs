@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Interface for a single animation frame. </summary>
     [ContractClass(typeof(ContractForIAnimationFrame))]
     public interface IAnimationFrame {

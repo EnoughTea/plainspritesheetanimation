@@ -8,12 +8,12 @@
     <ProjectGuid>{0B13CA13-D31E-4012-9095-09D5E7DAF867}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Unisa</RootNamespace>
-    <AssemblyName>Unisa</AssemblyName>
+    <RootNamespace>PlainSpritesheetAnimation</RootNamespace>
+    <AssemblyName>PlainSpritesheetAnimation</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile102</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile92</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
     <IntermediateOutputPath>obj\legacy\</IntermediateOutputPath>
@@ -162,6 +162,10 @@
     <Compile Include="TextureSize.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LICENSE" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Event handler for an animation sequence. </summary>
     /// <param name="sender">Animation sequence which fired the event.</param>
     public delegate void AnimationSequenceEventHandler(IAnimationSequence sender, EventArgs e);
@@ -69,8 +69,8 @@ namespace Unisa {
         /// </summary>
         void AdvanceFrame();
 
-        /// <summary> Updates animation sequence using the specified delta time between game frames. </summary>
-        /// <param name="delta">The amount of time passed between game frames.</param>
+        /// <summary> Updates animation sequence using the specified delta time between update calls. </summary>
+        /// <param name="delta">The amount of time passed between updates.</param>
         void Update(float delta);
 
         /// <summary>

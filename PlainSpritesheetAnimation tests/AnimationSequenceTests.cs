@@ -1,9 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
-using Unisa;
+using PlainSpritesheetAnimation;
 
 namespace UnivesalSpriteAnimation_tests {
     [TestFixture]

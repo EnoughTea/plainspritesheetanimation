@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Represents a point coordinates on a texture. </summary>
     [DataContract, DebuggerDisplay("{ToString()}")]
     public struct TexturePoint : IEquatable<TexturePoint> {

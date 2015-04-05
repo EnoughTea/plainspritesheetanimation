@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     [ContractClassFor(typeof(IAnimationSequence))]
     internal abstract class ContractForIAnimationSequence : IAnimationSequence {
         public string Name { get; set; }

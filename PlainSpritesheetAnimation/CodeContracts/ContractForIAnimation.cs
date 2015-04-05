@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     [ContractClassFor(typeof(IAnimation))]
     internal abstract class ContractForIAnimation : IAnimation {
         public string TextureId { get; set; }

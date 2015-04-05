@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Unisa {
+namespace PlainSpritesheetAnimation {
     /// <summary> Different types of automatic animation that take place. </summary>
     [DataContract]
     public enum AnimationType {

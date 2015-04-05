@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using Unisa;
+using PlainSpritesheetAnimation;
 
 namespace UnivesalSpriteAnimation_tests {
     [TestFixture]
