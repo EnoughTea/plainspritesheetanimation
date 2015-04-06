@@ -62,7 +62,9 @@ namespace PlainSpritesheetAnimation {
         /// <param name="namePart">The string to look for in sprite's name.</param>
         /// <returns> Found sprites. </returns>
         public IEnumerable<TexturePackerSprite> FilterByNamePart(string namePart) {
-            return Sprites.Where(sprite => sprite.Name != null && sprite.Name.Contains(namePart));
+            return (Sprites != null) 
+                ? Sprites.Where(sprite => sprite.Name != null && sprite.Name.Contains(namePart)) 
+                : Enumerable.Empty<TexturePackerSprite>();
         }
 
         /// <summary>
@@ -73,6 +75,8 @@ namespace PlainSpritesheetAnimation {
         [Pure]
         private Dictionary<string, List<TexturePackerSprite>> GetSequenceData() {
             var sequencesData = new Dictionary<string, List<TexturePackerSprite>>();
+            if (Sprites == null) { return sequencesData; }
+
             foreach (var sprite in Sprites) {
                 string name = sprite.Name;
                 int fileExtPos = name.LastIndexOf(".", StringComparison.Ordinal);
