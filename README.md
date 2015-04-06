@@ -18,6 +18,7 @@ Then you can set some properties defining how resulting sequence should be playe
 ###Creating animation sequences with TexturePacker's generic XML texture atlas description
 
 I really like TexturePacker, so I will show it first. Just for the reference, TexturePacker's generic XML file looks like this:
+
     <?xml version="1.0" encoding="UTF-8"?>
 	<!-- Created with TexturePacker http://texturepacker.com-->
 	<!-- $TexturePacker:SmartUpdate:78d3aff951abb5c82993a205c536379f$ -->
