@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using NUnit.Framework;
 using PlainSpritesheetAnimation;
 
@@ -137,12 +139,7 @@ r => 'y' only set if sprite is rotated
         }
 
         private static Stream MakeStream(string s) {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
+            return new MemoryStream(Encoding.UTF8.GetBytes(s ?? String.Empty));
         }
     }
 }
