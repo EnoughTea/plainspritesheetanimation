@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a single animation frame. </summary>
-    [DataContract(Name = "frame"), DebuggerDisplay("{ToString()}")]
+    [DataContract(Name = "animFrame", Namespace = ""), DebuggerDisplay("{ToString()}")]
     public class AnimationFrame : IAnimationFrame {
         private TextureRegion _source;
 

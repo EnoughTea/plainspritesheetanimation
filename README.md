@@ -53,7 +53,7 @@ Given this file, animation sequence could be created like this:
 		var walking = animationSequences.FindSequenceByName("walking");
 		var standing = animationSequences.FindSequenceByName("standing");
 			
-		// Amount of time each frame in sequence is shown is 0 right now, since these are out of TexturePacker's scope.
+		// Amount of time each frame is shown equals to 0 right now, since these are out of TexturePacker's scope.
 		// It possible to set duration for entire sequence:
 		walking.SetDuration(1f);
 		// 'walking' consists of 3 frames with 0 second durations, this new duration will be distributed evenly.

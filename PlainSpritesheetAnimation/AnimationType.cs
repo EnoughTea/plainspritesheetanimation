@@ -2,7 +2,7 @@
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Different types of automatic animation that take place. </summary>
-    [DataContract]
+    [DataContract(Name="animType", Namespace = "")]
     public enum AnimationType {
         /// <summary>
         ///     Specifies that the animation should go from first frame to the end and stop,

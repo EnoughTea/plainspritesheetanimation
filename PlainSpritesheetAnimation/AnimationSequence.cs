@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a sequence of frames. </summary>
-    [DataContract(Name = "seq", IsReference = true), KnownType(typeof(AnimationFrame)), 
+    [DataContract(Name = "animSeq", IsReference = true, Namespace = ""), KnownType(typeof(AnimationFrame)), 
     DebuggerDisplay("{ToString()}")]
     public class AnimationSequence : IAnimationSequence {
         [DataMember(Name = "a", IsRequired = false, EmitDefaultValue = false, Order = 5)] private bool _animating;

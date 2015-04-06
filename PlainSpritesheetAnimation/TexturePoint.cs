@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a point coordinates on a texture. </summary>
-    [DataContract, DebuggerDisplay("{ToString()}")]
+    [DataContract(Name = "texPt", Namespace = ""), DebuggerDisplay("{ToString()}")]
     public struct TexturePoint : IEquatable<TexturePoint> {
         private static readonly char[] _sep = {' '};
         public static readonly TexturePoint Zero = new TexturePoint();

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a size used to measure textures and their regions. </summary>
-    [DataContract, DebuggerDisplay("{ToString()}")]
+    [DataContract(Name = "texSz", Namespace = ""), DebuggerDisplay("{ToString()}")]
     public struct TextureSize : IEquatable<TextureSize> {
         private static readonly char[] _sep = {' '};
         public static readonly TextureSize Zero = new TextureSize();
