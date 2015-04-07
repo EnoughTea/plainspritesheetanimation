@@ -40,7 +40,7 @@ namespace PlainSpritesheetAnimation {
         ///     Drawing offset for this frame. It is often a useful property to correct frame drawing position
         ///     relative to the sequence center. Its usage depends on your workflow.
         /// </summary>
-        [DataMember(Name = "origin", EmitDefaultValue = false, IsRequired = false, Order = 2)]
+        [DataMember(Name = "ogn", EmitDefaultValue = false, IsRequired = false, Order = 2)]
         public TexturePoint Origin { get; set; }
 
         /// <summary> Clones this frame. </summary>

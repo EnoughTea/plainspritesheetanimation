@@ -18,10 +18,10 @@ namespace PlainSpritesheetAnimation {
             Height = height;
         }
 
-        [DataMember(Name = "w")]
+        [DataMember(Name = "w", Order = 0)]
         public int Width { get; private set; }
 
-        [DataMember(Name = "h")]
+        [DataMember(Name = "h", Order = 1)]
         public int Height { get; private set; }
 
         public bool Equals(TextureSize other) {

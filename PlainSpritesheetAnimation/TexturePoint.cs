@@ -20,11 +20,11 @@ namespace PlainSpritesheetAnimation {
         }
 
         /// <summary> Gets the X coordinate. </summary>
-        [DataMember(Name = "x")]
+        [DataMember(Name = "x", Order = 0)]
         public int X { get; private set; }
 
         /// <summary> Gets the Y coordinate. </summary>
-        [DataMember(Name = "y")]
+        [DataMember(Name = "y", Order = 1)]
         public int Y { get; private set; }
 
         public bool Equals(TexturePoint other) {

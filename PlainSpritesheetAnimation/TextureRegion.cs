@@ -23,16 +23,16 @@ namespace PlainSpritesheetAnimation {
             Height = height;
         }
 
-        [DataMember(Name = "x")]
+        [DataMember(Name = "x", Order = 0)]
         public int X { get; private set; }
 
-        [DataMember(Name = "y")]
+        [DataMember(Name = "y", Order = 1)]
         public int Y { get; private set; }
 
-        [DataMember(Name = "w")]
+        [DataMember(Name = "w", Order = 2)]
         public int Width { get; private set; }
 
-        [DataMember(Name = "h")]
+        [DataMember(Name = "h", Order = 3)]
         public int Height { get; private set; }
 
         /// <summary> Gets the left side X coordinate. </summary>
