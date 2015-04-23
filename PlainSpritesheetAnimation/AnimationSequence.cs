@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a sequence of frames. </summary>
-    [DataContract(Name = "animSeq", IsReference = true, Namespace = ""), KnownType(typeof(AnimationFrame)), 
-    DebuggerDisplay("{ToString()}")]
+    [DataContract(Name = "animSeq", IsReference = true, Namespace = ""), KnownType(typeof(AnimationFrame))]
     public class AnimationSequence : IAnimationSequence {
         [DataMember(Name = "a", IsRequired = false, EmitDefaultValue = false, Order = 5)] private bool _animating;
 

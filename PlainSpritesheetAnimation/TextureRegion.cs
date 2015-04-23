@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a rectangle on a texture. Start at the top-left corner, Y axis grows upwards. </summary>
-    [DataContract(Name = "texReg", Namespace = ""), DebuggerDisplay("{ToString()}")]
+    [DataContract(Name = "texReg", Namespace = "")]
     public struct TextureRegion : IEquatable<TextureRegion> {
         private static readonly char[] _sep = {' '};
         public static readonly TextureRegion Empty = new TextureRegion();

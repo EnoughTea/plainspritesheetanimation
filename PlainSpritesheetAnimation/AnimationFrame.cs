@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a single animation frame. </summary>
-    [DataContract(Name = "animFrame", Namespace = ""), DebuggerDisplay("{ToString()}")]
+    [DataContract(Name = "animFrame", Namespace = "")]
     public class AnimationFrame : IAnimationFrame {
         private TextureRegion _source;
 
