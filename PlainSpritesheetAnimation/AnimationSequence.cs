@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading;
 
 namespace PlainSpritesheetAnimation {
     /// <summary> Represents a sequence of frames. </summary>
@@ -115,7 +116,8 @@ namespace PlainSpritesheetAnimation {
             set {
                 if (_reverse != value) {
                     _reverse = value;
-                    PlayDirectionChanged(this, EventArgs.Empty);
+                    var playDirectionChanged = Interlocked.CompareExchange(ref PlayDirectionChanged, null, null);
+                    if (playDirectionChanged != null) { playDirectionChanged(this, EventArgs.Empty); }
                 }
             }
         }
@@ -130,7 +132,13 @@ namespace PlainSpritesheetAnimation {
             set {
                 if (_animating != value) {
                     _animating = value;
-                    if (_animating) { Started(this, EventArgs.Empty); } else { Stopped(this, EventArgs.Empty); }
+                    if (_animating) {
+                        var started = Interlocked.CompareExchange(ref Started, null, null);
+                        if (started != null) { started(this, EventArgs.Empty); }
+                    } else {
+                        var stopped = Interlocked.CompareExchange(ref Stopped, null, null);
+                        if (stopped != null) { stopped(this, EventArgs.Empty); }
+                    }
                 }
             }
         }
@@ -150,13 +158,13 @@ namespace PlainSpritesheetAnimation {
         public MirrorDirections Mirror { get; set; }
 
         /// <summary> Event which is raised when the animation is stopped. </summary>
-        public event AnimationSequenceEventHandler Stopped = delegate { };
+        public event AnimationSequenceEventHandler Stopped;
 
         /// <summary> Event which is raised when the animation is started. </summary>
-        public event AnimationSequenceEventHandler Started = delegate { };
+        public event AnimationSequenceEventHandler Started;
 
         /// <summary> Event which is raised when the play direction is changed. </summary>
-        public event AnimationSequenceEventHandler PlayDirectionChanged = delegate { };
+        public event AnimationSequenceEventHandler PlayDirectionChanged;
 
         /// <summary>
         ///     Shows the next frame in the sequence.  This pays attention to whether the animation is playing
@@ -208,7 +216,8 @@ namespace PlainSpritesheetAnimation {
         /// <returns>Maximum frame dimensions; empty if no frames are present or if their sources are empty.</returns>
         public TextureSize GetFrameBounds() {
             int width = 0, height = 0;
-            foreach (var frame in Frames) {
+            for (int frameIndex = 0; frameIndex < Frames.Count; frameIndex++) {
+                var frame = Frames[frameIndex];
                 var source = frame.Source;
                 if (source.Width > width) { width = source.Width; }
 
@@ -223,7 +232,10 @@ namespace PlainSpritesheetAnimation {
         /// <returns> A clone of this sequence. </returns>
         public IAnimationSequence Clone(string name) {
             IAnimationSequence result = new AnimationSequence(name);
-            foreach (var frame in Frames) { result.Frames.Add(frame.Clone()); }
+            for (int frameIndex = 0; frameIndex < Frames.Count; frameIndex++) {
+                var frame = Frames[frameIndex];
+                result.Frames.Add(frame.Clone());
+            }
 
             result.Animating = Animating;
             result.AnimationType = AnimationType;
@@ -244,8 +256,9 @@ namespace PlainSpritesheetAnimation {
         /// <remarks>If every frame duration is 0, new duration will be distributed evenly.</remarks>
         public void SetDuration(float newDuration) {
             float oldDuration = GetDuration();
-            foreach (var frame in Frames) {
-                if (Math.Abs(oldDuration) > 0.001f) {   // <0.001 is considered 0, since it is too short of a duration.
+            for (int frameIndex = 0; frameIndex < Frames.Count; frameIndex++) {
+                var frame = Frames[frameIndex];
+                if (Math.Abs(oldDuration) > 0.001f) { // <0.001 is considered 0, since it is too short of a duration.
                     frame.Duration = newDuration * (frame.Duration / oldDuration);
                 } else {
                     frame.Duration = newDuration / Frames.Count;
