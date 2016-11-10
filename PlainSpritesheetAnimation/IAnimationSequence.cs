@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
-namespace PlainSpritesheetAnimation {
+namespace PlainSpritesheetAnimation
+{
     /// <summary> Event handler for an animation sequence. </summary>
     /// <param name="sender">Animation sequence which fired the event.</param>
     public delegate void AnimationSequenceEventHandler(IAnimationSequence sender, EventArgs e);
 
     /// <summary> Interface for a sequence of frames. </summary>
-    [ContractClass(typeof(ContractForIAnimationSequence))]
-    public interface IAnimationSequence {
+    public interface IAnimationSequence
+    {
         /// <summary>  Gets the name of this animation sequence. </summary>
         string Name { get; set; }
 

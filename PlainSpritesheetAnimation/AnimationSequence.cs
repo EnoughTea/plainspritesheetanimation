@@ -4,27 +4,33 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 
-namespace PlainSpritesheetAnimation {
+namespace PlainSpritesheetAnimation
+{
     /// <summary> Represents a sequence of frames. </summary>
     [DataContract(Name = "animSeq", IsReference = true, Namespace = ""), KnownType(typeof(AnimationFrame))]
-    public class AnimationSequence : IAnimationSequence {
-        [DataMember(Name = "a", IsRequired = false, EmitDefaultValue = false, Order = 5)] private bool _animating;
-
-        [DataMember(Name = "cfi", IsRequired = false, EmitDefaultValue = false, Order = 10)] private int
-            _currentFrameIndex;
-
-        private float _frameTime;
-        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 6)] private bool _reverse;
-
+    public class AnimationSequence : IAnimationSequence
+    {
         /// <summary> Initializes a new instance of the <see cref="AnimationSequence" /> class. </summary>
         /// <param name="name">The animation sequence name.</param>
         /// <param name="animationFrames">The animation sequence frames.</param>
-        public AnimationSequence(string name = null, IEnumerable<IAnimationFrame> animationFrames = null) {
+        public AnimationSequence(string name = null, IEnumerable<IAnimationFrame> animationFrames = null)
+        {
             Name = name;
             Frames = (animationFrames != null)
                 ? new List<IAnimationFrame>(animationFrames)
                 : new List<IAnimationFrame>();
         }
+
+        [DataMember(Name = "a", IsRequired = false, EmitDefaultValue = false, Order = 5)]
+        private bool _animating;
+
+        [DataMember(Name = "cfi", IsRequired = false, EmitDefaultValue = false, Order = 10)]
+        private int _currentFrameIndex;
+
+        private float _frameTime;
+
+        [DataMember(Name = "rev", IsRequired = false, EmitDefaultValue = false, Order = 6)]
+        private bool _reverse;
 
         /// <summary>  Gets the name of this animation sequence. </summary>
         [DataMember(Name = "name", Order = 0)]
@@ -36,73 +42,82 @@ namespace PlainSpritesheetAnimation {
 
         /// <summary> Gets the frames this sequence consist of. </summary>
         [DataMember(Name = "frames", Order = 100)]
-        public List<IAnimationFrame> Frames { get; private set; }
+        public List<IAnimationFrame> Frames { get; }
 
         /// <summary>
         ///     Gets the current frame in the frame sequence. Can be null if <see cref="CurrentFrameIndex" /> is
         ///     out of range for the <see cref="Frames" /> list.
         /// </summary>
-        public IAnimationFrame CurrentFrame {
-            get { return !IsBeyondIndex(CurrentFrameIndex) ? Frames[CurrentFrameIndex] : null; }
-        }
+        /// <exception cref="NotSupportedException">Unknown animation type.</exception>
+        public IAnimationFrame CurrentFrame => !IsBeyondIndex(CurrentFrameIndex) ? Frames[CurrentFrameIndex] : null;
 
         /// <summary> Gets or sets index of the current frame in the frame sequence. </summary>
-        public int CurrentFrameIndex {
+        /// <exception cref="NotSupportedException" accessor="set">Unknown animation type.</exception>
+        public int CurrentFrameIndex
+        {
             get { return _currentFrameIndex; }
 
             set {
                 switch (AnimationType) {
-                    case AnimationType.Once:
+                case AnimationType.Once:
+                    _currentFrameIndex = value;
+                    if (IsBeyondIndex(_currentFrameIndex)) {
+                        _currentFrameIndex = GetFirstIndex();
+                        Animating = false;
+                    }
+                    break;
+
+                case AnimationType.OnceHoldLast:
+                    _currentFrameIndex = value;
+                    if (IsBeyondIndex(_currentFrameIndex)) {
+                        _currentFrameIndex = GetLastIndex();
+                        Animating = false;
+                    }
+                    break;
+
+                case AnimationType.OnceDisappear:
+                    _currentFrameIndex = value;
+                    if (IsBeyondIndex(_currentFrameIndex)) {
+                        Animating = false;
+                        Visible = false;
+                        _currentFrameIndex = GetLastIndex();
+                    }
+                    break;
+
+                case AnimationType.Looping:
+                    if (Frames.Count > 0) {
+                        while (value < 0) {
+                            value += Frames.Count;
+                        }
+
+                        _currentFrameIndex = value % Frames.Count;
+                    }
+                    else {
                         _currentFrameIndex = value;
-                        if (IsBeyondIndex(_currentFrameIndex)) {
-                            _currentFrameIndex = GetFirstIndex();
-                            Animating = false;
-                        }
-                        break;
+                    }
+                    break;
 
-                    case AnimationType.OnceHoldLast:
+                case AnimationType.PingPong:
+                    if (Frames.Count > 0) {
+                        value = Math.Abs(value);
+                        value %= Frames.Count * 2;
+                        if (value >= Frames.Count) {
+                            value = (2 * Frames.Count) - 1 - value;
+                        }
+
                         _currentFrameIndex = value;
-                        if (IsBeyondIndex(_currentFrameIndex)) {
-                            _currentFrameIndex = GetLastIndex();
-                            Animating = false;
+                        // Ping-pong on last index.
+                        if (IsLastIndex(_currentFrameIndex)) {
+                            Reverse = !Reverse;
                         }
-                        break;
-
-                    case AnimationType.OnceDisappear:
+                    }
+                    else {
                         _currentFrameIndex = value;
-                        if (IsBeyondIndex(_currentFrameIndex)) {
-                            Animating = false;
-                            Visible = false;
-                            _currentFrameIndex = GetLastIndex();
-                        }
-                        break;
+                    }
+                    break;
 
-                    case AnimationType.Looping:
-                        if (Frames.Count > 0) {
-                            while (value < 0) { value += Frames.Count; }
-
-                            _currentFrameIndex = value % Frames.Count;
-                        } else {
-                            _currentFrameIndex = value;
-                        }
-                        break;
-
-                    case AnimationType.PingPong:
-                        if (Frames.Count > 0) {
-                            value = Math.Abs(value);
-                            value %= Frames.Count * 2;
-                            if (value >= Frames.Count) { value = (2 * Frames.Count) - 1 - value; }
-
-                            _currentFrameIndex = value;
-                            // Ping-pong on last index.
-                            if (IsLastIndex(_currentFrameIndex)) { Reverse = !Reverse; }
-                        } else {
-                            _currentFrameIndex = value;
-                        }
-                        break;
-
-                    default:
-                        throw new NotSupportedException("This animation type is not supported: " + AnimationType);
+                default:
+                    throw new NotSupportedException("This animation type is not supported: " + AnimationType);
                 }
             }
         }
@@ -110,14 +125,18 @@ namespace PlainSpritesheetAnimation {
         /// <summary>
         ///     Gets or sets a value indicating whether or not this animation sequence plays in reverse.
         /// </summary>
-        public bool Reverse {
+        public bool Reverse
+        {
             get { return _reverse; }
 
             set {
                 if (_reverse != value) {
                     _reverse = value;
-                    var playDirectionChanged = Interlocked.CompareExchange(ref PlayDirectionChanged, null, null);
-                    if (playDirectionChanged != null) { playDirectionChanged(this, EventArgs.Empty); }
+#if LEGACY
+                    Interlocked.CompareExchange(ref PlayDirectionChanged, null, null)?.Invoke(this, EventArgs.Empty);
+#else
+                    Volatile.Read(ref PlayDirectionChanged)?.Invoke(this, EventArgs.Empty);
+#endif
                 }
             }
         }
@@ -126,18 +145,25 @@ namespace PlainSpritesheetAnimation {
         ///     Gets or sets a value indicating whether the animation sequence is running.
         ///     Can be used for pausing.
         /// </summary>
-        public bool Animating {
+        public bool Animating
+        {
             get { return _animating; }
 
             set {
                 if (_animating != value) {
                     _animating = value;
                     if (_animating) {
-                        var started = Interlocked.CompareExchange(ref Started, null, null);
-                        if (started != null) { started(this, EventArgs.Empty); }
+#if LEGACY
+                        Interlocked.CompareExchange(ref Started, null, null)?.Invoke(this, EventArgs.Empty);
+#else
+                        Volatile.Read(ref Started)?.Invoke(this, EventArgs.Empty);
+#endif
                     } else {
-                        var stopped = Interlocked.CompareExchange(ref Stopped, null, null);
-                        if (stopped != null) { stopped(this, EventArgs.Empty); }
+#if LEGACY
+                        Interlocked.CompareExchange(ref Stopped, null, null)?.Invoke(this, EventArgs.Empty);
+#else
+                        Volatile.Read(ref Stopped)?.Invoke(this, EventArgs.Empty);
+#endif
                     }
                 }
             }
@@ -170,12 +196,19 @@ namespace PlainSpritesheetAnimation {
         ///     Shows the next frame in the sequence.  This pays attention to whether the animation is playing
         ///     forwards or reverse. Usually it's called automatically by <see cref="Update" />.
         /// </summary>
-        public void AdvanceFrame() {
-            if (Reverse) { CurrentFrameIndex--; } else { CurrentFrameIndex++; }
+        public void AdvanceFrame()
+        {
+            if (Reverse) {
+                CurrentFrameIndex--;
+            }
+            else {
+                CurrentFrameIndex++;
+            }
         }
 
         /// <summary> Restarts the animation sequence. </summary>
-        public void Start() {
+        public void Start()
+        {
             CurrentFrameIndex = GetFirstIndex();
             Animating = true;
             Visible = true;
@@ -185,7 +218,8 @@ namespace PlainSpritesheetAnimation {
         ///     Stops and resets the animation sequence. If you want to pause animation sequence,
         ///     use <see cref="Animating" /> property instead.
         /// </summary>
-        public void Stop() {
+        public void Stop()
+        {
             CurrentFrameIndex = GetFirstIndex();
             Animating = false;
             Visible = false;
@@ -193,10 +227,13 @@ namespace PlainSpritesheetAnimation {
 
         /// <summary> Updates animation sequence using the specified delta time between update calls. </summary>
         /// <param name="delta">The amount of time passed between updates.</param>
-        public void Update(float delta) {
+        public void Update(float delta)
+        {
             var currentFrame = CurrentFrame;
-            if (currentFrame == null) { return; }
-            
+            if (currentFrame == null) {
+                return;
+            }
+
             if (Animating) {
                 if (currentFrame.Duration > 0) {
                     _frameTime += delta;
@@ -204,7 +241,8 @@ namespace PlainSpritesheetAnimation {
                         _frameTime -= currentFrame.Duration;
                         AdvanceFrame();
                     }
-                } else {
+                }
+                else {
                     AdvanceFrame();
                 }
             }
@@ -214,14 +252,19 @@ namespace PlainSpritesheetAnimation {
         ///     Calculates the maximum frame dimensions of all frames currently in the <see cref="Frames" /> list.
         /// </summary>
         /// <returns>Maximum frame dimensions; empty if no frames are present or if their sources are empty.</returns>
-        public TextureSize GetFrameBounds() {
+        public TextureSize GetFrameBounds()
+        {
             int width = 0, height = 0;
             for (int frameIndex = 0; frameIndex < Frames.Count; frameIndex++) {
                 var frame = Frames[frameIndex];
                 var source = frame.Source;
-                if (source.Width > width) { width = source.Width; }
+                if (source.Width > width) {
+                    width = source.Width;
+                }
 
-                if (source.Height > height) { height = source.Height; }
+                if (source.Height > height) {
+                    height = source.Height;
+                }
             }
 
             return new TextureSize(width, height);
@@ -230,7 +273,8 @@ namespace PlainSpritesheetAnimation {
         /// <summary> Creates a clone of this sequence. </summary>
         /// <param name="name">The name of the cloned sequence.</param>
         /// <returns> A clone of this sequence. </returns>
-        public IAnimationSequence Clone(string name) {
+        public IAnimationSequence Clone(string name)
+        {
             IAnimationSequence result = new AnimationSequence(name);
             for (int frameIndex = 0; frameIndex < Frames.Count; frameIndex++) {
                 var frame = Frames[frameIndex];
@@ -248,19 +292,23 @@ namespace PlainSpritesheetAnimation {
 
         /// <summary>Gets the combined duration in seconds for all frames in the sequence.</summary>
         /// <returns>Combined duration in seconds for all frames in the sequence.</returns>
-        public float GetDuration() {
+        public float GetDuration()
+        {
             return Frames.Sum(frame => frame.Duration);
         }
 
         /// <summary>Sets the new duration in seconds for the sequence, scaling individual frame durations.</summary>
         /// <remarks>If every frame duration is 0, new duration will be distributed evenly.</remarks>
-        public void SetDuration(float newDuration) {
+        public void SetDuration(float newDuration)
+        {
             float oldDuration = GetDuration();
             for (int frameIndex = 0; frameIndex < Frames.Count; frameIndex++) {
                 var frame = Frames[frameIndex];
-                if (Math.Abs(oldDuration) > 0.001f) { // <0.001 is considered 0, since it is too short of a duration.
+                if (Math.Abs(oldDuration) > 0.001f) {
+                    // <0.001 is considered 0, since it is too short of a duration.
                     frame.Duration = newDuration * (frame.Duration / oldDuration);
-                } else {
+                }
+                else {
                     frame.Duration = newDuration / Frames.Count;
                 }
             }
@@ -268,27 +316,32 @@ namespace PlainSpritesheetAnimation {
 
         /// <summary> Returns a <see cref="string" /> that represents this instance. </summary>
         /// <returns> A <see cref="string" /> that represents this instance. </returns>
-        public override string ToString() {
-            string name = !String.IsNullOrEmpty(Name) ? Name : "<nameless>";
+        public override string ToString()
+        {
+            string name = !string.IsNullOrEmpty(Name) ? Name : "<nameless>";
             string visible = Visible ? "visible" : "invisible";
             string animating = Animating ? "active" : "inactive";
             return name + ": " + "frame index is " + CurrentFrameIndex + " out of " + Frames.Count + " frames (" +
                    visible + ", " + animating + ")";
         }
 
-        private int GetLastIndex() {
+        private int GetLastIndex()
+        {
             return !Reverse ? Math.Max(0, Frames.Count - 1) : 0;
         }
 
-        private int GetFirstIndex() {
+        private int GetFirstIndex()
+        {
             return !Reverse ? 0 : Math.Max(0, Frames.Count - 1);
         }
 
-        private bool IsLastIndex(int index) {
+        private bool IsLastIndex(int index)
+        {
             return (Reverse && index == 0) || (!Reverse && index == Frames.Count - 1);
         }
 
-        private bool IsBeyondIndex(int index) {
+        private bool IsBeyondIndex(int index)
+        {
             return (index < 0 || index >= Frames.Count);
         }
     }

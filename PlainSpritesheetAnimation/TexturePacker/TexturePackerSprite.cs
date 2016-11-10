@@ -1,9 +1,11 @@
 ﻿using System.Xml.Serialization;
 
-namespace PlainSpritesheetAnimation {
+namespace PlainSpritesheetAnimation
+{
     /// <summary> Contains information about a single sprite. </summary>
     [XmlType(TypeName = "sprite")]
-    public class TexturePackerSprite {
+    public class TexturePackerSprite
+    {
         /// <summary> Gets or sets the name of the sprite. </summary>
         [XmlAttribute("n")]
         public string Name { get; set; }
@@ -26,7 +28,10 @@ namespace PlainSpritesheetAnimation {
 
         /// <summary> Gets or sets a value indicating whether this sprite is rotated. </summary>
         /// <value> <c>true</c> if sprite is rotated; otherwise, <c>false</c>. </value>
-        public bool Rotated { get { return RotationMark == "y"; } }
+        public bool Rotated
+        {
+            get { return RotationMark == "y"; }
+        }
 
         /// <summary> Gets or sets a value indicating whether this sprite is rotated. </summary>
         /// <value> <c>"y"</c> if sprite is rotated; otherwise, <c>false</c>. </value>
@@ -50,6 +55,9 @@ namespace PlainSpritesheetAnimation {
         public int OriginalHeight { get; set; }
 
         /// <summary> Gets a source rectangle: texture region where sprite is located. </summary>
-        public TextureRegion Source { get { return new TextureRegion(X, Y, Width, Height); } }
+        public TextureRegion Source
+        {
+            get { return new TextureRegion(X, Y, Width, Height); }
+        }
     }
 }

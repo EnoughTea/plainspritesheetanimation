@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace PlainSpritesheetAnimation {
+﻿namespace PlainSpritesheetAnimation
+{
     /// <summary> Interface for a single animation frame. </summary>
-    [ContractClass(typeof(ContractForIAnimationFrame))]
-    public interface IAnimationFrame {
+    public interface IAnimationFrame
+    {
         /// <summary> Gets the source rectangle: region of this frame in the animation's texture. </summary>
         TextureRegion Source { get; set; }
 

@@ -2,10 +2,10 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FD3C9FDE-FCB1-49AA-8105-B8DDC3647D84}</ProjectGuid>
+    <ProjectGuid>{0B13CA13-D31E-4012-9095-09D5E7DAF867}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PlainSpritesheetAnimation</RootNamespace>
@@ -13,16 +13,17 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile44</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile92</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <IntermediateOutputPath>obj\legacy\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <OutputPath>bin\LegacyDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;LEGACY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
@@ -68,14 +69,12 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>ExtendedCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\LegacyRelease\</OutputPath>
+    <DefineConstants>TRACE;LEGACY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
@@ -123,23 +122,39 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AnimationFrame.cs" />
-    <Compile Include="AnimationSequence.cs" />
-    <Compile Include="AnimationType.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IAnimationFrame.cs" />
-    <Compile Include="IAnimationSequence.cs" />
+    <Compile Include="AnimationFrame.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AnimationSequence.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AnimationType.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EnumerableAnimationSequenceExtensions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IAnimationFrame.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IAnimationSequence.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MirrorDirections.cs" />
-    <Compile Include="TexturePacker\TexturePackerSprite.cs" />
-    <Compile Include="TexturePacker\TexturePackerAtlas.cs" />
-    <Compile Include="TexturePoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextureRegion.cs" />
-    <Compile Include="TextureSize.cs" />
+    <Compile Include="TexturePacker\TexturePackerAtlas.cs" />
+    <Compile Include="TexturePacker\TexturePackerSprite.cs" />
+    <Compile Include="TexturePoint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextureRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextureSize.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
