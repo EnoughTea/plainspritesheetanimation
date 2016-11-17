@@ -8,7 +8,7 @@ namespace PlainSpritesheetAnimation
     [DataContract(Name = "texReg", Namespace = "")]
     public struct TextureRegion : IEquatable<TextureRegion>
     {
-        private static readonly char[] _SpaceSeparator = { ' ' };
+        private static readonly char[] _Separator = { ' ' };
         public static readonly TextureRegion Empty = new TextureRegion();
 
         /// <summary>
@@ -73,7 +73,8 @@ namespace PlainSpritesheetAnimation
         /// <returns> A <see cref="String" /> that represents this instance. </returns>
         public override string ToString()
         {
-            return X + " " + Y + " " + Width + " " + Height;
+            string sep = _Separator[0].ToString();
+            return X + sep + Y + sep + Width + sep + Height;
         }
 
         /// <summary>Determines whether the specified <see cref="Object" />, is equal to this instance.</summary>
@@ -157,8 +158,8 @@ namespace PlainSpritesheetAnimation
         public static TextureRegion Parse(string region, IFormatProvider provider = null)
         {
             TextureRegion result = Empty;
-            if (!String.IsNullOrWhiteSpace(region)) {
-                string[] rawSource = region.Split(_SpaceSeparator, StringSplitOptions.RemoveEmptyEntries);
+            if (!string.IsNullOrWhiteSpace(region)) {
+                string[] rawSource = region.Split(_Separator, StringSplitOptions.RemoveEmptyEntries);
                 if (rawSource.Length == 4) {
                     result = new TextureRegion(Convert.ToInt32(rawSource[0], provider),
                                                Convert.ToInt32(rawSource[1], provider),

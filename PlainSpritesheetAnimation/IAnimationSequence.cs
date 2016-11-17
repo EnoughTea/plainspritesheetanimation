@@ -67,8 +67,8 @@ namespace PlainSpritesheetAnimation
         void Stop();
 
         /// <summary>
-        ///     Shows the next frame in the sequence.  This pays attention to whether the animation is playing
-        ///     forwards or reverse. Usually it's called automatically by <see cref="Update" />.
+        ///     Shows the next frame (previous if the animation is playing in reverse) in the sequence.
+        ///     Usually it's called automatically by <see cref="Update" />.
         /// </summary>
         void AdvanceFrame();
 

@@ -7,7 +7,7 @@ namespace PlainSpritesheetAnimation
     [DataContract(Name = "texPt", Namespace = "")]
     public struct TexturePoint : IEquatable<TexturePoint>
     {
-        private static readonly char[] _SpaceSeparator = { ' ' };
+        private static readonly char[] _Separator = { ' ' };
         public static readonly TexturePoint Zero = new TexturePoint();
 
         /// <summary> Initializes a new instance of the <see cref="TexturePoint" /> struct. </summary>
@@ -37,7 +37,7 @@ namespace PlainSpritesheetAnimation
         /// <returns> A <see cref="String" /> that represents this instance. </returns>
         public override string ToString()
         {
-            return X + " " + Y;
+            return X + _Separator[0].ToString() + Y;
         }
 
         public override bool Equals(object obj)
@@ -72,7 +72,7 @@ namespace PlainSpritesheetAnimation
         {
             TexturePoint result = Zero;
             if (!string.IsNullOrWhiteSpace(point)) {
-                string[] rawSource = point.Split(_SpaceSeparator, StringSplitOptions.RemoveEmptyEntries);
+                string[] rawSource = point.Split(_Separator, StringSplitOptions.RemoveEmptyEntries);
                 if (rawSource.Length == 2) {
                     result = new TexturePoint(Convert.ToInt32(rawSource[0], provider),
                                               Convert.ToInt32(rawSource[1], provider));

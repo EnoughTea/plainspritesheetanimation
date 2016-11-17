@@ -66,8 +66,8 @@ namespace PlainSpritesheetAnimation
         /// <returns> A <see cref="string" /> that represents this instance. </returns>
         public override string ToString()
         {
-            string origin = (Origin != TexturePoint.Zero) ? ", origin at " + Origin : String.Empty;
-            return "[" + Source + "]" + origin + " (lasts " + Duration.ToString("0.###") + " s)";
+            string origin = (Origin != TexturePoint.Zero) ? ", origin at " + Origin : string.Empty;
+            return $"[{Source}]{origin} (lasts {Duration:0.###} s)";
         }
     }
 }

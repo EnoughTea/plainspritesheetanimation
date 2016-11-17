@@ -5,7 +5,7 @@ namespace PlainSpritesheetAnimation {
     /// <summary> Represents a size used to measure textures and their regions. </summary>
     [DataContract(Name = "texSz", Namespace = "")]
     public struct TextureSize : IEquatable<TextureSize> {
-        private static readonly char[] _SpaceSeparator = {' '};
+        private static readonly char[] _Separator = {' '};
         public static readonly TextureSize Zero = new TextureSize();
 
         /// <summary>Initializes a new instance of the <see cref="TextureSize"/> struct.</summary>
@@ -47,7 +47,7 @@ namespace PlainSpritesheetAnimation {
         /// <summary> Returns a <see cref="String" /> that represents this instance. </summary>
         /// <returns> A <see cref="String" /> that represents this instance. </returns>
         public override string ToString() {
-            return Width + " " + Height;
+            return Width + _Separator[0].ToString() + Height;
         }
 
         public override bool Equals(object obj) {
@@ -74,8 +74,8 @@ namespace PlainSpritesheetAnimation {
         /// <returns>Parsed <see cref="TextureSize" />.</returns>
         public static TextureSize Parse(string size, IFormatProvider provider = null) {
             TextureSize result = Zero;
-            if (!String.IsNullOrWhiteSpace(size)) {
-                string[] rawSource = size.Split(_SpaceSeparator, StringSplitOptions.RemoveEmptyEntries);
+            if (!string.IsNullOrWhiteSpace(size)) {
+                string[] rawSource = size.Split(_Separator, StringSplitOptions.RemoveEmptyEntries);
                 if (rawSource.Length == 2) {
                     result = new TextureSize(
                         Convert.ToInt32(rawSource[0], provider),
