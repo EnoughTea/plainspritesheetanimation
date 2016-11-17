@@ -39,19 +39,19 @@ namespace PlainSpritesheetAnimation
 
         /// <summary> Gets the left side X coordinate of the region rectangle. </summary>
         [DataMember(Name = "x", Order = 0)]
-        public int X { get; }
+        public int X { get; private set; }
 
         /// <summary> Gets the top side Y coordinate of the region rectangle. </summary>
         [DataMember(Name = "y", Order = 1)]
-        public int Y { get; }
+        public int Y { get; private set; }
 
         /// <summary> Gets the region rectangle width. </summary>
         [DataMember(Name = "w", Order = 2)]
-        public int Width { get; }
+        public int Width { get; private set; }
 
         /// <summary> Gets the region rectangle height. </summary>
         [DataMember(Name = "h", Order = 3)]
-        public int Height { get; }
+        public int Height { get; private set; }
 
         /// <summary> Gets the left side X coordinate. </summary>
         public int Left => X;

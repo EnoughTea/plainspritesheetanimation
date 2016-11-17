@@ -24,11 +24,11 @@ namespace PlainSpritesheetAnimation
 
         /// <summary> Gets the X coordinate. </summary>
         [DataMember(Name = "x", Order = 0)]
-        public int X { get; }
+        public int X { get; private set; }
 
         /// <summary> Gets the Y coordinate. </summary>
         [DataMember(Name = "y", Order = 1)]
-        public int Y { get; }
+        public int Y { get; private set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>

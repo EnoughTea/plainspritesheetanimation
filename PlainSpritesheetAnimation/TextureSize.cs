@@ -33,11 +33,11 @@ namespace PlainSpritesheetAnimation {
 
         /// <summary>Gets the width.</summary>
         [DataMember(Name = "w", Order = 0)]
-        public int Width { get; }
+        public int Width { get; private set; }
 
         /// <summary>Gets the height.</summary>
         [DataMember(Name = "h", Order = 1)]
-        public int Height { get; }
+        public int Height { get; private set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>

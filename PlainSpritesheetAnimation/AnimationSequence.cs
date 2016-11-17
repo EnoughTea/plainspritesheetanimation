@@ -42,7 +42,7 @@ namespace PlainSpritesheetAnimation
 
         /// <summary> Gets the frames this sequence consist of. </summary>
         [DataMember(Name = "frames", Order = 100)]
-        public List<IAnimationFrame> Frames { get; }
+        public List<IAnimationFrame> Frames { get; private set; }
 
         /// <summary>
         ///     Gets the current frame in the frame sequence. Can be null if <see cref="CurrentFrameIndex" /> is
