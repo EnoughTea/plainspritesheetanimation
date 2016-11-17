@@ -143,11 +143,7 @@ namespace PlainSpritesheetAnimation
         /// <returns>true if the given string ends with a digit; false otherwise.</returns>
         private static bool EndsWithDigit(string target)
         {
-#if LEGACY
             return !string.IsNullOrEmpty(target) && target.Substring(target.Length - 1).Cast<char>().Any(char.IsDigit);
-#else
-            return !string.IsNullOrEmpty(target) && target.Substring(target.Length - 1).Any(char.IsDigit);
-#endif
         }
 
         /// <summary>
