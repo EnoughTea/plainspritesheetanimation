@@ -5,9 +5,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using NUnit.Framework;
-using PlainSpritesheetAnimation;
 
-namespace UnivesalSpriteAnimation_tests {
+namespace PlainSpritesheetAnimation.Tests {
     internal static class Tools {
         public static void CheckTextureRegionXml(XElement actual, TextureRegion expected) {
             Assert.That(actual != null);

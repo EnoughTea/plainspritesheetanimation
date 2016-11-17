@@ -5,13 +5,13 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainSpritesheetAnimation", "PlainSpritesheetAnimation\PlainSpritesheetAnimation.csproj", "{FD3C9FDE-FCB1-49AA-8105-B8DDC3647D84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainSpritesheetAnimation tests", "PlainSpritesheetAnimation tests\PlainSpritesheetAnimation tests.csproj", "{966C9023-4586-4F36-BCBC-33E9D304A8A3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A3E47855-A880-423D-B9AF-4A9864A22062}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainSpritesheetAnimation.Tests", "PlainSpritesheetAnimation.Tests\PlainSpritesheetAnimation.Tests.csproj", "{966C9023-4586-4F36-BCBC-33E9D304A8A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

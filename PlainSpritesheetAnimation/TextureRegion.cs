@@ -9,6 +9,8 @@ namespace PlainSpritesheetAnimation
     public struct TextureRegion : IEquatable<TextureRegion>
     {
         private static readonly char[] _Separator = { ' ' };
+
+        /// <summary>Empty region.</summary>
         public static readonly TextureRegion Empty = new TextureRegion();
 
         /// <summary>
@@ -35,15 +37,19 @@ namespace PlainSpritesheetAnimation
             Height = height;
         }
 
+        /// <summary> Gets the left side X coordinate of the region rectangle. </summary>
         [DataMember(Name = "x", Order = 0)]
         public int X { get; }
 
+        /// <summary> Gets the top side Y coordinate of the region rectangle. </summary>
         [DataMember(Name = "y", Order = 1)]
         public int Y { get; }
 
+        /// <summary> Gets the region rectangle width. </summary>
         [DataMember(Name = "w", Order = 2)]
         public int Width { get; }
 
+        /// <summary> Gets the region rectangle height. </summary>
         [DataMember(Name = "h", Order = 3)]
         public int Height { get; }
 
@@ -105,11 +111,19 @@ namespace PlainSpritesheetAnimation
             }
         }
 
+        /// <summary>Implements the operator ==.</summary>
+        /// <param name="left">The left operand.</param>
+        /// <param name="right">The right operand.</param>
+        /// <returns><c>true</c> if both operands are considired equal; <c>false</c> otherwise.</returns>
         public static bool operator ==(TextureRegion left, TextureRegion right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>Implements the operator !=.</summary>
+        /// <param name="left">The left operand.</param>
+        /// <param name="right">The right operand.</param>
+        /// <returns><c>true</c> if both operands are considired not equal; <c>false</c> otherwise.</returns>
         public static bool operator !=(TextureRegion left, TextureRegion right)
         {
             return !left.Equals(right);

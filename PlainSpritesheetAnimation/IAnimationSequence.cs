@@ -5,6 +5,7 @@ namespace PlainSpritesheetAnimation
 {
     /// <summary> Event handler for an animation sequence. </summary>
     /// <param name="sender">Animation sequence which fired the event.</param>
+    /// <param name="e">Event arguments.</param>
     public delegate void AnimationSequenceEventHandler(IAnimationSequence sender, EventArgs e);
 
     /// <summary> Interface for a sequence of frames. </summary>

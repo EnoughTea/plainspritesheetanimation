@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using PlainSpritesheetAnimation;
 
-namespace UnivesalSpriteAnimation_tests {
+namespace PlainSpritesheetAnimation.Tests {
     [TestFixture]
     public class TextureAtlasDataTests {
         private const string TestAtlasXmlRepresentation = @"<?xml version=""1.0"" encoding=""UTF-8""?>
@@ -97,7 +96,7 @@ r => 'y' only set if sprite is rotated
             foreach (var sequence in sequences) {
                 Assert.That(sequence.TextureId == _testAtlas.ImagePath);
             }
-            
+
             Assert.That(sequences.Count == 8);
             Assert.That(!sequences.GetVisibleSequences().Any());
             Assert.That(!sequences.GetAnimatingSequences().Any());

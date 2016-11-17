@@ -6,12 +6,14 @@ namespace PlainSpritesheetAnimation {
     [DataContract(Name = "texSz", Namespace = "")]
     public struct TextureSize : IEquatable<TextureSize> {
         private static readonly char[] _Separator = {' '};
+
+        /// <summary>Zero size.</summary>
         public static readonly TextureSize Zero = new TextureSize();
 
         /// <summary>Initializes a new instance of the <see cref="TextureSize"/> struct.</summary>
         /// <param name="width">Texture width in pixels.</param>
         /// <param name="height">Texture height in pixels.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// width - Texture width cannot be negative.
         /// or
         /// height - Texture height cannot be negative.
@@ -29,9 +31,11 @@ namespace PlainSpritesheetAnimation {
             Height = height;
         }
 
+        /// <summary>Gets the width.</summary>
         [DataMember(Name = "w", Order = 0)]
         public int Width { get; }
 
+        /// <summary>Gets the height.</summary>
         [DataMember(Name = "h", Order = 1)]
         public int Height { get; }
 
@@ -50,20 +54,35 @@ namespace PlainSpritesheetAnimation {
             return Width + _Separator[0].ToString() + Height;
         }
 
+        /// <summary>Determines whether the specified <see cref="object" />, is equal to this instance.</summary>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+        /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance;
+        /// otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj))
                 return false;
             return obj is TextureSize && Equals((TextureSize) obj);
         }
 
+        /// <summary>Returns a hash code for this instance.</summary>
+        /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures
+        /// like a hash table.</returns>
         public override int GetHashCode() {
             unchecked { return (Width * 397) ^ Height; }
         }
 
+        /// <summary>Implements the operator ==.</summary>
+        /// <param name="left">The left operand.</param>
+        /// <param name="right">The right operand.</param>
+        /// <returns><c>true</c> if both operands are considired equal; <c>false</c> otherwise.</returns>
         public static bool operator ==(TextureSize left, TextureSize right) {
             return left.Equals(right);
         }
 
+        /// <summary>Implements the operator !=.</summary>
+        /// <param name="left">The left operand.</param>
+        /// <param name="right">The right operand.</param>
+        /// <returns><c>true</c> if both operands are considired not equal; <c>false</c> otherwise.</returns>
         public static bool operator !=(TextureSize left, TextureSize right) {
             return !left.Equals(right);
         }

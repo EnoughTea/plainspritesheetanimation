@@ -1,9 +1,9 @@
 ﻿# Plain sprite-sheet animation library
 
-Plain sprite sheet animation library is barebone library for a sprite sheet 2D animation support.
+Plain sprite sheet animation library is a barebones library for a sprite sheet 2D animation support.
 It manages all information needed to draw a frame to screen; how exactly it is drawn is up to user.
 
-I made this thing for myself, so it is not supposed to be a complex framework, but perhaps someone would find it useful.
+It is a personal library and it is not supposed to be a complex framework, but perhaps someone could find it useful.
 
 
 ## Well, what is it?
@@ -17,9 +17,9 @@ Then you can set some properties defining how resulting sequence should be playe
 
 ###Creating animation sequences with TexturePacker's generic XML texture atlas description
 
-I really like TexturePacker, so I will show it first. Just for the reference, TexturePacker's generic XML file looks like this:
+I like TexturePacker, so I will show it first. Just for the reference, TexturePacker's generic XML file looks like this:
 
-    <?xml version="1.0" encoding="UTF-8"?>
+	<?xml version="1.0" encoding="UTF-8"?>
 	<!-- Created with TexturePacker http://texturepacker.com-->
 	<!-- $TexturePacker:SmartUpdate:78d3aff951abb5c82993a205c536379f$ -->
 	<!--Format:
@@ -34,18 +34,18 @@ I really like TexturePacker, so I will show it first. Just for the reference, Te
 	oH => sprite's original height (only available if trimmed)
 	r => 'y' only set if sprite is rotated
 	-->
-    <TextureAtlas imagePath="whole texture atlas.png" width="1024" height="2048">
-        <sprite n="walking 1.png" x="0" y="0" w="32" h="48"/>
+	<TextureAtlas imagePath="whole texture atlas.png" width="1024" height="2048">
+		<sprite n="walking 1.png" x="0" y="0" w="32" h="48"/>
 		<sprite n="walking 2.png" x="32" y="0" w="32" h="48"/>
 		<sprite n="walking 3.png" x="64" y="0" w="32" h="48"/>
 		<sprite n="standing.png" x="96" y="0" w="59" h="83"/>
-	    ...
-    </TextureAtlas>
+		...
+	</TextureAtlas>
 
 Given this file, animation sequence could be created like this:
 
 	using (var atlasFileStream = File.OpenRead(atlasXmlFile)) {
-        var atlasData = TexturePackerAtlas.Load(atlasFileStream);
+		var atlasData = TexturePackerAtlas.Load(atlasFileStream);
 		// Now that TP's data is loaded, you can do whatever with it. Lets create sequences from it:
 		var animationSequences = atlasData.CreateAnimationSequences().ToList();
 
@@ -58,7 +58,7 @@ Given this file, animation sequence could be created like this:
 		walking.SetDuration(1f);
 		// 'walking' consists of 3 frames with 0 second durations, this new duration will be distributed evenly.
 		// Each frame's new duration would be 1/3.
-        // By the way, if frame durations would have been set to something other than 0,
+		// By the way, if frame durations would have been set to something other than 0,
 		// they would be scaled to new duration, keeping timing ratio between old and new durations.
 
 		// Lets run 'walking' sequence in a loop:
@@ -72,7 +72,7 @@ Given this file, animation sequence could be created like this:
 		// 'Stopped' event will occur when sequence is stopped. It can happen either when its time is up, 
 		// or when its 'Animating' property is changed by Stop() call or direct change by user.
 		// 'Started' event works in similar way.
-    }
+	}
 
 
 ###Creating animation sequences through code:
@@ -81,14 +81,14 @@ Same sequences as in example above can be created through code.
 
 	string walkingName = "walking";
 	var walkingFrames = new List<AnimationFrame> {
-		new AnimationFrame(new TextureRegion(0, 0, 32, 48), 0.333f),
-		new AnimationFrame(new TextureRegion(32, 0, 32, 48), 0.333f),
-		new AnimationFrame(new TextureRegion(64, 0, 32, 48), 0.333f),
+		new AnimationFrame(new TextureRegion(0, 0, 32, 48), 1/3f),
+		new AnimationFrame(new TextureRegion(32, 0, 32, 48), 1/3f),
+		new AnimationFrame(new TextureRegion(64, 0, 32, 48), 1/3f),
 	};
 
 	var walking = new AnimationSequence(walkingName, walkingFrames);
-	var standing = new AnimationSequence("standing", 
-										 new[] { new AnimationFrame(new TextureRegion(96, 0, 59, 83), 0) });
+	var standing = new AnimationSequence("standing",
+		new[] { new AnimationFrame(new TextureRegion(96, 0, 59, 83), 0) });
 
 
 ###One last thing
@@ -111,7 +111,7 @@ There is no built-in renderer, so you will need to have your own. Then rendering
 			var frameDrawOffset = frameToDraw.Origin;
 			var screenPosition = yourObjectPosition + frameDrawOffset;
 			yourSpriteBatch.Draw(texture, screenPosition, textureSourceTexels, Color.White);
-        }
+		}
 	}
 
 

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using PlainSpritesheetAnimation;
 
-namespace UnivesalSpriteAnimation_tests {
+namespace PlainSpritesheetAnimation.Tests {
     [TestFixture]
     public class AnimationSequenceTests {
         private AnimationSequence _testSequence;

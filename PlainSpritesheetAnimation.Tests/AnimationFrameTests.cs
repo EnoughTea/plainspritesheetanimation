@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
-using PlainSpritesheetAnimation;
 
-namespace UnivesalSpriteAnimation_tests {
+namespace PlainSpritesheetAnimation.Tests {
     [TestFixture]
     public class AnimationFrameTests {
         public const string TestFrameXmlRepresentation = @"<?xml version=""1.0"" encoding=""utf-16""?>

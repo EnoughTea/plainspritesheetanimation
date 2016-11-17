@@ -8,6 +8,8 @@ namespace PlainSpritesheetAnimation
     public struct TexturePoint : IEquatable<TexturePoint>
     {
         private static readonly char[] _Separator = { ' ' };
+
+        /// <summary>Zero point.</summary>
         public static readonly TexturePoint Zero = new TexturePoint();
 
         /// <summary> Initializes a new instance of the <see cref="TexturePoint" /> struct. </summary>
@@ -28,6 +30,10 @@ namespace PlainSpritesheetAnimation
         [DataMember(Name = "y", Order = 1)]
         public int Y { get; }
 
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+        /// </returns>
         public bool Equals(TexturePoint other)
         {
             return X == other.X && Y == other.Y;
@@ -40,6 +46,10 @@ namespace PlainSpritesheetAnimation
             return X + _Separator[0].ToString() + Y;
         }
 
+        /// <summary>Determines whether the specified <see cref="object" />, is equal to this instance.</summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance;
+        /// otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -47,6 +57,9 @@ namespace PlainSpritesheetAnimation
             return obj is TexturePoint && Equals((TexturePoint)obj);
         }
 
+        /// <summary>Returns a hash code for this instance.</summary>
+        /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures
+        /// like a hash table.</returns>
         public override int GetHashCode()
         {
             unchecked {
@@ -54,11 +67,19 @@ namespace PlainSpritesheetAnimation
             }
         }
 
+        /// <summary>Implements the operator ==.</summary>
+        /// <param name="left">The left operand.</param>
+        /// <param name="right">The right operand.</param>
+        /// <returns><c>true</c> if both operands are considired equal; <c>false</c> otherwise.</returns>
         public static bool operator ==(TexturePoint left, TexturePoint right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>Implements the operator !=.</summary>
+        /// <param name="left">The left operand.</param>
+        /// <param name="right">The right operand.</param>
+        /// <returns><c>true</c> if both operands are considired not equal; <c>false</c> otherwise.</returns>
         public static bool operator !=(TexturePoint left, TexturePoint right)
         {
             return !left.Equals(right);
