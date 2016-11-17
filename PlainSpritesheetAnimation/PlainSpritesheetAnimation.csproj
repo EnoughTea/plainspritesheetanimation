@@ -126,7 +126,6 @@
     <Compile Include="AnimationFrame.cs" />
     <Compile Include="AnimationSequence.cs" />
     <Compile Include="AnimationType.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IAnimationFrame.cs" />
     <Compile Include="IAnimationSequence.cs" />
     <Compile Include="EnumerableAnimationSequenceExtensions.cs" />
