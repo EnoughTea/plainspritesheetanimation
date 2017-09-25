@@ -15,7 +15,7 @@ Then you can set some properties defining how resulting sequence should be playe
   * Animation sequences are serializable through DataContractSerializer.
 
 
-###Creating animation sequences with TexturePacker's generic XML texture atlas description
+### Creating animation sequences with TexturePacker's generic XML texture atlas description
 
 I like TexturePacker, so I will show it first. Just for the reference, TexturePacker's generic XML file looks like this:
 
@@ -75,7 +75,7 @@ Given this file, animation sequence could be created like this:
 	}
 
 
-###Creating animation sequences through code:
+### Creating animation sequences through code:
 
 Same sequences as in example above can be created through code.
 
@@ -91,7 +91,7 @@ Same sequences as in example above can be created through code.
 		new[] { new AnimationFrame(new TextureRegion(96, 0, 59, 83), 0) });
 
 
-###One last thing
+### One last thing
 
 Animations need to know how much time has passed, so they need to be updated somewhere:
 
